@@ -1,8 +1,5 @@
 #English
 
-Okay, I'll translate the README.md into English, keeping the engaging and interactive style, and emphasizing that it's a first version that will be continuously improved with AI.
-
-Here's the English version for your GitHub and LinkedIn:
 🛍️ My Simple Clothing and Accessories Store
 
 Welcome to the repository for my Simple Clothing and Accessories Store! This is the first version of an e-commerce project I developed with a focus on demonstrating the essential functionalities of an online sales platform.
