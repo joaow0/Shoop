@@ -1,0 +1,22 @@
+<!-- aqui abaixo estamos herdando o template do main.html -->
+{% extends 'loja/main.html' %}
+{% load static %}
+<!-- abaixo, onde o conteudo herdado vai ficar -->
+{% block content %}
+    <div class="row">
+        {% for produto in produtos %}
+        <div class="col-lg-4">
+            <img class="thumbnail" src="{{ produto.imagemURL }}">
+            <div class="box-element product">
+                <h6><strong>{{produto.nome}}</strong></h6>
+                <hr>
+                
+                <button data-product="{{produto.id}}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Adicionar ao carrinho</button>
+                <a class="btn btn-outline-sucess" href="#">Vizualizar</a>
+                <h4 style="display: inline-block; float: right;"><strong>R${{ produto.preço|floatformat:2 }}</strong></h4>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock content %}

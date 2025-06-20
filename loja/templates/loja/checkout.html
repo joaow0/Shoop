@@ -1,0 +1,147 @@
+{% extends 'loja/main.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+    <div class="row d-flex justify-content-between align-items-start" style="gap: 20px; flex-wrap: wrap;">
+
+        <!-- FORMULÁRIO -->
+        <div class="col-lg-7 col-md-12 mb-4">
+            <div class="box-element" id="form-wrapper">
+                <form id="formulario">
+                    {% csrf_token %}
+                    <div id="user-info">
+                        <div class="form-field">
+                            <input required class="form-control" type="text" name="nome" id="nome" placeholder="Nome..">
+                        </div>
+                        <div class="form-field">
+                            <input required class="form-control" type="email" name="email" id="email" placeholder="Email..">
+                        </div>
+                    </div>
+
+                    {% if pedido.envio %}
+                    <div id="formulario-envio">
+                        <hr>
+                        <p>Informações De Envio:</p>
+                        <hr>
+                        <div class="form-field">
+                            <input class="form-control" type="text" name="address" id="endereco" placeholder="Address..">
+                        </div>
+                        <div class="form-field">
+                            <input class="form-control" type="text" name="city" id="cidade" placeholder="City..">
+                        </div>
+                        <div class="form-field">
+                            <input class="form-control" type="text" name="state" id="estado" placeholder="State..">
+                        </div>
+                        <div class="form-field">
+                            <input class="form-control" type="text" name="zipcode" id="cep" placeholder="Zip code..">
+                        </div>
+                        <div class="form-field">
+                            <input class="form-control" type="text" name="country" id="pais" placeholder="Country..">
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <hr>
+                    <input id="form-button" class="btn btn-success btn-block" type="submit" value="Continuar">
+                </form>
+            </div>
+
+            <br>
+
+            <div class="box-element hidden" id="payment-info">
+                <small>Paypal Options</small>
+                <div id="paypal-button-container"></div> <!-- Corrigido -->
+            </div>
+        </div>
+
+        <!-- RESUMO DO PEDIDO -->
+        <div class="col-lg-4 col-md-12">
+            <div class="box-element">
+                <a class="btn btn-outline-dark" href="{% url 'carrinho' %}">&#x2190; Back to Cart</a>
+                <hr>
+                <h3>Order Summary</h3>
+                <hr>
+
+                {% for item in itens %}
+                <div class="cart-row d-flex align-items-center mb-2" style="display: flex;">
+                    <div style="flex:2"><img class="row-image" src="{{ item.produto.imagemURL }}"></div>
+                    <div style="flex:2"><p>{{ item.produto.nome }}</p></div>
+                    <div style="flex:1"><p>R${{ item.produto.preço }}</p></div>
+                    <div style="flex:1"><p>{{ item.quantidade }}x</p></div>
+                </div>
+                {% endfor %}
+
+                <h5>Items: {{ pedido.get_cart_items }}</h5>
+                <h5>Total: R${{ pedido.get_cart_total|floatformat:2 }}</h5>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script> 
+
+<script>
+    paypal.Buttons({
+        createOrder: function(data, actions) {
+            return fetch('/demo/checkout/api/paypal/order/create/', {
+                method: 'post'
+            }).then(res => res.json()).then(orderData => orderData.id);
+        },
+        onApprove: function(data, actions) {
+            return fetch('/demo/checkout/api/paypal/order/' + data.orderID + '/capture/', {
+                method: 'post'
+            }).then(res => res.json()).then(orderData => {
+                const errorDetail = Array.isArray(orderData.details) && orderData.details[0];
+                if (errorDetail && errorDetail.issue === 'INSTRUMENT_DECLINED') {
+                    return actions.restart();
+                }
+                if (errorDetail) {
+                    let msg = 'Sorry, your transaction could not be processed.';
+                    if (errorDetail.description) msg += '\n\n' + errorDetail.description;
+                    if (orderData.debug_id) msg += ' (' + orderData.debug_id + ')';
+                    return alert(msg);
+                }
+                const transaction = orderData.purchase_units[0].payments.captures[0];
+                alert('Transaction ' + transaction.status + ': ' + transaction.id);
+                window.location.href = '/';
+            });
+        }
+    }).render('#paypal-button-container');
+</script>
+
+<style>
+.hidden {
+  display: none;
+}
+</style>
+
+<script>
+  function getCookie(name) {
+    let cookieArr = document.cookie.split(";");
+    for(let i = 0; i < cookieArr.length; i++) {
+      let cookiePair = cookieArr[i].split("=");
+      if(name == cookiePair[0].trim()) {
+        return decodeURIComponent(cookiePair[1]);
+      }
+    }
+    return null;
+  }
+
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || '';
+  const total = '{{ pedido.get_cart_total|default:"0.00" }}';
+  const envioRequerido = '{{ pedido.envio|yesno:"true,false" }}' === 'true';
+
+  const formulario = document.getElementById('formulario');
+  const pagamentoInfo = document.getElementById('payment-info');
+  const botaoContinuar = document.getElementById('form-button');
+
+  formulario.addEventListener('submit', function (e) {
+    e.preventDefault();
+    pagamentoInfo.classList.remove('hidden');
+    botaoContinuar.classList.add('hidden');
+  });
+</script>
+
+{% endblock content %}
