@@ -1,0 +1,27 @@
+.card {
+    border-radius: 8px;
+}
+
+.card-body img {
+    border-radius: 6px;
+    border: 1px solid #eee;
+}
+
+h6 {
+    margin: 0;
+    font-weight: 600;
+}
+
+span {
+    font-weight: 500;
+}
+
+.chg-quantity {
+    transition: transform 0.2s ease;
+}
+
+.chg-quantity:hover {
+    transform: scale(1.1);
+    opacity: 0.8;
+    cursor: pointer;
+}

@@ -1,0 +1,182 @@
+{% extends 'loja/main.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+
+    <!-- Mensagens -->
+    {% if messages %}
+        <div class="mb-4">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Seção Principal -->
+    <div class="row">
+        <!-- Imagem -->
+        <div class="col-md-6">
+            <img src="{{ produto.imagemURL }}" alt="{{ produto.nome }}" class="img-fluid rounded">
+        </div>
+
+        <!-- Informações -->
+        <div class="col-md-6">
+            <h1 class="fw-bold mb-1">{{ produto.nome }}</h1>
+
+            <!-- ⭐ Estrelas -->
+            <div class="mb-3">
+                {% for i in "12345"|slice:":5" %}
+                    {% if media >= forloop.counter %}
+                        <span style="color: gold;">★</span>
+                    {% else %}
+                        <span style="color: #ccc;">★</span>
+                    {% endif %}
+                {% endfor %}
+                <span class="text-muted ms-2">({{ media }}/5)</span>
+            </div>
+
+            <h3 class="text-success mb-3">R${{ produto.preço|floatformat:2 }}</h3>
+
+            <div class="d-flex gap-3 mb-4">
+                <button data-product="{{ produto.id }}" data-action="add" class="btn btn-primary update-cart">
+                    🛒 Adicionar ao Carrinho
+                </button>
+
+                <a href="{% url 'checkout' %}" class="btn btn-success">
+                    💳 Comprar Agora
+                </a>
+            </div>
+
+            <p class="text-muted">{{ produto.descricao }}</p>
+        </div>
+    </div>
+
+    <!-- Divider -->
+    <hr class="my-5">
+
+    <!-- Seção 2 - Descrição e Características -->
+    <div class="row">
+        <div class="col-12">
+            <h3 class="fw-bold mb-3">📝 Descrição do Produto</h3>
+            <p class="text-muted">
+                {{ produto.descricao_longa|linebreaks }}
+            </p>
+
+            <h4 class="fw-bold mt-4 mb-3">🔧 Características Técnicas</h4>
+            <ul class="list-group">
+                {% if produto.caracteristicas %}
+                    {% for caracteristica in produto.caracteristicas.splitlines %}
+                        <li class="list-group-item">{{ caracteristica }}</li>
+                    {% endfor %}
+                {% else %}
+                    <li class="list-group-item">Sem características informadas.</li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Divider -->
+    <hr class="my-5">
+
+    <!-- Seção 3 - Avaliações -->
+    <div class="row">
+        <div class="col-12">
+            <h3 class="fw-bold mb-3">⭐ Avaliações ({{ media }}/5)</h3>
+
+            {% if avaliacoes %}
+                {% for avaliacao in avaliacoes %}
+                    <div class="border rounded p-3 mb-3">
+                        <div class="d-flex justify-content-between">
+                            <strong>{{ avaliacao.cliente.nome }}</strong>
+                            <span>Nota: {{ avaliacao.nota }}/5</span>
+                        </div>
+                        <p class="mt-2 mb-0">{{ avaliacao.comentario }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>Este produto ainda não possui avaliações.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Formulário de Avaliação -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h4 class="fw-bold mb-3">🗨️ Deixe sua Avaliação</h4>
+
+            {% if user.is_authenticated %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="nota" class="form-label">Nota</label>
+                        <select id="nota" name="nota" class="form-select" required>
+                            <option value="">Selecione</option>
+                            <option value="5">5 - Excelente</option>
+                            <option value="4">4 - Muito bom</option>
+                            <option value="3">3 - Bom</option>
+                            <option value="2">2 - Regular</option>
+                            <option value="1">1 - Ruim</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="comentario" class="form-label">Comentário (opcional)</label>
+                        <textarea id="comentario" name="comentario" rows="3" class="form-control"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enviar Avaliação</button>
+                </form>
+            {% else %}
+                <div class="alert alert-warning">
+                    <strong>Atenção:</strong> Faça <a href="#">login</a> para deixar sua avaliação.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+<!-- Divider -->
+<hr class="my-5">
+
+<!-- Seção 4 - Produtos Recomendados -->
+<div class="row">
+    <div class="col-12">
+        <h3 class="fw-bold mb-4">🔥 Produtos Recomendados</h3>
+    </div>
+
+    {% if recomendados %}
+        {% for item in recomendados %}
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <a href="{% url 'produto' item.id %}">
+                        <img src="{{ item.imagemURL }}" class="card-img-top" alt="{{ item.nome }}">
+                    </a>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">
+                            <a href="{% url 'produto' item.id %}" class="text-decoration-none text-dark">
+                                {{ item.nome }}
+                            </a>
+                        </h5>
+                        <p class="text-success fw-bold mb-2">
+                            R$ {{ item.preço|floatformat:2 }}
+                        </p>
+                        <div class="mt-auto">
+                            <a href="{% url 'produto' item.id %}" class="btn btn-sm btn-outline-primary w-100 mb-2">
+                                🔍 Ver Produto
+                            </a>
+                            <button data-product="{{ item.id }}" data-action="add" class="btn btn-sm btn-primary update-cart w-100">
+                                🛒 Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-12">
+            <p class="text-muted">Nenhum produto recomendado no momento.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
