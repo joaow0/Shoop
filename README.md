@@ -1,3 +1,6 @@
+## ENGLISH
+
+
 # 🛍️ Ecom - Online Store (v3)
 
 Welcome to the **third version** of **Ecom**, a modern and minimalist e-commerce platform. This version adds visual and functional improvements that bring the store closer to a complete and professional shopping experience.
@@ -30,6 +33,7 @@ Welcome to the **third version** of **Ecom**, a modern and minimalist e-commerce
 ---
 
 
+## PORTUGUÊS
 
 # 🛍️ Ecom - Loja Online (v3)
 
