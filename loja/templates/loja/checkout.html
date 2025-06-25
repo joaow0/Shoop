@@ -1,17 +1,17 @@
 {% extends 'loja/main.html' %}
 {% load static %}
+{% load format_tags %}
 
 {% block styles %}
 <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
 {% endblock %}
 
 {% block content %}
-
 <div class="container my-4">
-    <div class="row gap-4">
+    <div class="row gx-5 gy-4 flex-lg-nowrap"> <!-- corrigido: gx/gy e nowrap -->
 
-        <!-- FORMULÁRIO -->
-        <div class="col-lg-7 col-md-12">
+        <!-- FORMULÁRIO E PAGAMENTO -->
+        <div class="col-lg-8 col-md-12">
             <div class="box-element">
                 <form id="formulario">
                     {% csrf_token %}
@@ -60,10 +60,53 @@
             <br>
 
             <div class="box-element hidden" id="payment-info">
-                <p><small>Opções de pagamento via PayPal</small></p>
-                <div id="paypal-button-container"></div>
+                <h5 class="mb-3">💳 Escolha o Método de Pagamento</h5>
+
+                <div class="mb-3">
+                    <select class="form-select" id="metodo-pagamento" required>
+                        <option value="">Selecione...</option>
+                        <option value="pix">Pix</option>
+                        <option value="cartao">Cartão de Crédito</option>
+                        <option value="boleto">Boleto Bancário</option>
+                    </select>
+                </div>
+
+                <!-- PIX -->
+                <div id="pagamento-pix" class="metodo hidden">
+                    <p>Escaneie o QR Code abaixo com seu app bancário:</p>
+                    <img src="{% static 'imagens/qrcode-exemplo.png' %}" alt="QR Code Pix" class="img-fluid" style="max-width: 200px;">
+                </div>
+
+                <!-- CARTÃO -->
+                <div id="pagamento-cartao" class="metodo hidden">
+                    <div class="mb-3">
+                        <label class="form-label">Número do Cartão</label>
+                        <input class="form-control" type="text" placeholder="0000 0000 0000 0000">
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label class="form-label">Validade</label>
+                            <input class="form-control" type="text" placeholder="MM/AA">
+                        </div>
+                        <div class="col">
+                            <label class="form-label">CVV</label>
+                            <input class="form-control" type="text" placeholder="123">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Nome no Cartão</label>
+                        <input class="form-control" type="text" placeholder="Nome completo">
+                    </div>
+                    <button class="btn btn-success w-100">Finalizar Pagamento</button>
+                </div>
+
+                <!-- BOLETO -->
+                <div id="pagamento-boleto" class="metodo hidden">
+                    <p>Gerar boleto bancário para pagamento.</p>
+                    <button class="btn btn-outline-secondary">Gerar Boleto</button>
+                </div>
             </div>
-        </div>
+        </div> <!-- ⬅️ fechamento da coluna do formulário/pagamento -->
 
         <!-- RESUMO DO PEDIDO -->
         <div class="col-lg-4 col-md-12">
@@ -75,14 +118,13 @@
 
                 {% for item in itens %}
                 <div class="d-flex align-items-center mb-3" style="gap: 10px;">
-                    <img src="{{ item.produto.imagemURL }}" class="rounded"
-                         style="width: 70px; height: 70px; object-fit: cover;">
+                    <img src="{{ item.produto.imagemURL }}" class="rounded" style="width: 70px; height: 70px; object-fit: cover;">
                     <div class="flex-grow-1">
                         <h6 class="mb-1">{{ item.produto.nome }}</h6>
-                        <small>{{ item.quantidade }} x R${{ item.produto.preço|floatformat:2 }}</small>
+                        <small>{{ item.quantidade }} x {{ item.produto.preço|moeda_br }}</small>
                     </div>
                     <div>
-                        <strong>R${{ item.get_total|floatformat:2 }}</strong>
+                        <strong>{{ item.get_total|moeda_br }}</strong>
                     </div>
                 </div>
                 {% endfor %}
@@ -96,7 +138,7 @@
 
                 <div class="d-flex justify-content-between">
                     <span>Total:</span>
-                    <strong class="text-success">R${{ pedido.get_cart_total|floatformat:2 }}</strong>
+                    <strong class="text-success">{{ pedido.get_cart_total|moeda_br }}</strong>
                 </div>
             </div>
         </div>

@@ -24,13 +24,15 @@
 
     <!-- CSS Customizado -->
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    {% block styles %}{% endblock %}
 </head>
 
 <body>
 
-    <!-- NAVBAR -->
+    <!-- NAVBAR PRINCIPAL -->
     <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top custom-navbar">
         <div class="container">
+
             <!-- Logo -->
             <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'loja' %}">
                 <img src="{% static 'imagens/logo.png' %}" alt="Logo da Ecom" width="32" height="32">
@@ -44,29 +46,16 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- Itens da navbar -->
+            <!-- Conteúdo da Navbar -->
             <div class="collapse navbar-collapse" id="navbarNav">
 
-                <!-- Menu lateral esquerdo -->
-                <ul class="navbar-nav ms-auto me-4 gap-lg-4 gap-3">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'loja' %}">Loja</a>
-                    </li>
-                    <li class="nav-item">
-                        
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Contato</a>
-                    </li>
-                </ul>
-
-                <!-- Barra de pesquisa -->
-                <form class="d-flex mx-auto w-50" role="search" method="get" action="">
+                <!-- Barra de Pesquisa -->
+                <form class="d-flex mx-auto w-50" role="search" method="get" action="{% url 'pesquisa' %}">
                     <input class="form-control rounded-pill px-4" type="search"
                         placeholder="Pesquisar produtos..." aria-label="Search" name="q" required>
                 </form>
 
-                <!-- Botões Login, Cadastrar e Carrinho -->
+                <!-- Botões Login, Cadastro e Carrinho -->
                 <div class="d-flex align-items-center gap-2 ms-4">
                     <a href="#" class="btn btn-outline-light btn-sm px-3">Login</a>
                     <a href="#" class="btn btn-outline-light btn-sm px-3">Cadastrar</a>
@@ -83,16 +72,73 @@
         </div>
     </nav>
 
+    <!-- SUBNAVBAR -->
+    <nav class="bg-primary">
+        <div class="container">
+            <ul class="nav justify-content-start py-2 gap-3">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white fw-semibold" href="#" role="button" data-bs-toggle="dropdown">
+                        Categorias
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Eletrônicos</a></li>
+                        <li><a class="dropdown-item" href="#">Roupas</a></li>
+                        <li><a class="dropdown-item" href="#">Livros</a></li>
+                        <li><a class="dropdown-item" href="#">Acessórios</a></li>
+                        <li><a class="dropdown-item" href="#">Outros</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link text-white fw-semibold" href="#">Ofertas</a></li>
+                <li class="nav-item"><a class="nav-link text-white fw-semibold" href="#">Cupons</a></li>
+                <li class="nav-item"><a class="nav-link text-white fw-semibold" href="#">Moda</a></li>
+                <li class="nav-item"><a class="nav-link text-white fw-semibold" href="#">Vender</a></li>
+                <li class="nav-item"><a class="nav-link text-white fw-semibold" href="#">Contato</a></li>
+            </ul>
+        </div>
+    </nav>
+
     <!-- CONTEÚDO PRINCIPAL -->
     <main class="container my-5">
-        {% block content %}
-        {% endblock content %}
+        {% block content %}{% endblock content %}
     </main>
 
     <!-- FOOTER -->
-    <footer class="text-center text-white py-4">
-        <p class="mb-0">&copy; 2025 <strong>Ecom</strong> — Todos os direitos reservados.</p>
-        <small>Desenvolvido com ❤️ e Django</small>
+    <footer class="bg-dark text-white pt-5 pb-4">
+        <div class="container text-center text-md-start">
+            <div class="row text-center text-md-start">
+                <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+                    <h6 class="text-uppercase mb-4 font-weight-bold">Ecom</h6>
+                    <p>Loja online com os melhores produtos e ofertas. Qualidade e confiança para suas compras.</p>
+                </div>
+
+                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+                    <h6 class="text-uppercase mb-4 font-weight-bold">Links</h6>
+                    <p><a href="#" class="text-white text-decoration-none">Sobre nós</a></p>
+                    <p><a href="#" class="text-white text-decoration-none">Termos de uso</a></p>
+                </div>
+
+                <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
+                    <h6 class="text-uppercase mb-4 font-weight-bold">Redes Sociais</h6>
+                    <a href="#" class="text-white me-3"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="text-white"><i class="bi bi-twitter-x"></i></a>
+                </div>
+
+                <div class="col-md-3 mb-4">
+                    <h6 class="text-uppercase fw-bold">Contato</h6>
+                    <p class="text-white mb-1"><i class="bi bi-envelope me-2"></i> contato@ecom.com</p>
+                    <p class="text-white mb-1"><i class="bi bi-telephone me-2"></i> (22) 22222-2222</p>
+                    <p class="text-white"><i class="bi bi-whatsapp me-2"></i> (11) 98765-4321</p>
+                </div>
+            </div>
+
+            <hr class="my-3">
+
+            <div class="text-center">
+                <p class="mb-0">&copy; 2025 <strong>Ecom</strong> — Todos os direitos reservados.</p>
+                <small>Desenvolvido com ❤️ e Django</small>
+            </div>
+        </div>
     </footer>
 
     <!-- Bootstrap Bundle (JS + Popper) -->
@@ -100,7 +146,6 @@
 
     <!-- Script Carrinho -->
     <script src="{% static 'js/carrinho.js' %}" defer></script>
-
+    {% block scripts %}{% endblock %}
 </body>
-
 </html>

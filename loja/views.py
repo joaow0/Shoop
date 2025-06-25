@@ -13,9 +13,35 @@ from random import sample
 def loja(request):
     data = carrinhodata(request)
     produtos = Produto.objects.all()
+
+    # Filtros
+    categoria = request.GET.get('categoria')
+    ordenacao = request.GET.get('ordenar')
+    preco_min = request.GET.get('preco_min')
+    preco_max = request.GET.get('preco_max')
+
+    if categoria and categoria != 'todos':
+        produtos = produtos.filter(categoria=categoria)
+
+    if preco_min:
+        produtos = produtos.filter(preço__gte=preco_min)
+
+    if preco_max:
+        produtos = produtos.filter(preço__lte=preco_max)
+
+    if ordenacao == 'menor_preco':
+        produtos = produtos.order_by('preço')
+    elif ordenacao == 'maior_preco':
+        produtos = produtos.order_by('-preço')
+    elif ordenacao == 'a_z':
+        produtos = produtos.order_by('nome')
+    elif ordenacao == 'z_a':
+        produtos = produtos.order_by('-nome')
+
     contexto = {
         'produtos': produtos,
-        'carrinhoitens': data['carrinhoitens']
+        'carrinhoitens': data['carrinhoitens'],
+        'categoria_selecionada': categoria,
     }
     return render(request, 'loja/loja.html', contexto)
 
@@ -48,9 +74,6 @@ def atualizacaoitem(request):
     produto_id = data['productId']
     action = data['action']
 
-    print('Produto:', produto_id)
-    print('Ação:', action)
-
     try:
         produto = Produto.objects.get(id=produto_id)
     except Produto.DoesNotExist:
@@ -63,7 +86,6 @@ def atualizacaoitem(request):
         )
 
         pedido, _ = Pedido.objects.get_or_create(cliente=cliente, completo=False)
-
         pedido_item, _ = PedidoItem.objects.get_or_create(pedido=pedido, produto=produto)
 
         if action == 'add':
@@ -76,7 +98,9 @@ def atualizacaoitem(request):
         if pedido_item.quantidade <= 0:
             pedido_item.delete()
 
-        return JsonResponse('Item atualizado!', safe=False)
+        total_itens = pedido.get_cart_items  # <-- seu método @property
+
+        return JsonResponse({'mensagem': 'Item atualizado!', 'total_itens': total_itens})
 
     else:
         carrinho = json.loads(request.COOKIES.get('cart', '{}'))
@@ -92,11 +116,15 @@ def atualizacaoitem(request):
                 if carrinho[str(produto_id)]['quantidade'] <= 0:
                     del carrinho[str(produto_id)]
 
-        response = JsonResponse('Item atualizado no carrinho!', safe=False)
+        # Calcula total de itens no carrinho (para usuários anônimos)
+        total_itens = sum(item['quantidade'] for item in carrinho.values())
+
+        response = JsonResponse({
+            'mensagem': 'Item atualizado no carrinho!',
+            'total_itens': total_itens
+        })
         response.set_cookie('cart', json.dumps(carrinho))
         return response
-
-
 
 
 
@@ -120,6 +148,8 @@ def sobre(request):
 
 
 
+
+
 def produtoDetalhes(request, pk):
     produto = Produto.objects.get(id=pk)
     avaliacoes = Avaliacao.objects.filter(produto=produto)
@@ -136,6 +166,8 @@ def produtoDetalhes(request, pk):
         'carrinhoitens': data['carrinhoitens']
     }
     return render(request, 'loja/produto.html', contexto)
+
+
 
 
 
@@ -201,3 +233,48 @@ def produtoDetalhes(request, pk):
         'recomendados': recomendados,
     }
     return render(request, 'loja/produto.html', contexto)
+
+
+
+
+
+
+def pesquisa(request):
+    data = carrinhodata(request)
+    query = request.GET.get('q', '')
+    produtos = Produto.objects.filter(nome__icontains=query) if query else Produto.objects.none()
+
+    # Filtros
+    categoria = request.GET.get('categoria')
+    ordenar = request.GET.get('ordenar')
+    preco_min = request.GET.get('preco_min')
+    preco_max = request.GET.get('preco_max')
+
+    if categoria and categoria != 'todos':
+        produtos = produtos.filter(categoria=categoria)
+
+    if preco_min:
+        produtos = produtos.filter(preço__gte=preco_min)
+
+    if preco_max:
+        produtos = produtos.filter(preço__lte=preco_max)
+
+    if ordenar == 'menor_preco':
+        produtos = produtos.order_by('preço')
+    elif ordenar == 'maior_preco':
+        produtos = produtos.order_by('-preço')
+    elif ordenar == 'a_z':
+        produtos = produtos.order_by('nome')
+    elif ordenar == 'z_a':
+        produtos = produtos.order_by('-nome')
+
+    contexto = {
+        'produtos': produtos,
+        'carrinhoitens': data['carrinhoitens'],
+        'query': query,
+        'categoria_selecionada': categoria,
+        'preco_min': preco_min,
+        'preco_max': preco_max,
+        'ordenar': ordenar,
+    }
+    return render(request, 'loja/pesquisa.html', contexto)

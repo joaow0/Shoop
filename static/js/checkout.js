@@ -8,6 +8,22 @@ formulario.addEventListener('submit', function (e) {
     botaoContinuar.classList.add('hidden');
 });
 
+const metodoPagamento = document.getElementById('metodo-pagamento');
+const metodos = document.querySelectorAll('.metodo');
+
+metodoPagamento.addEventListener('change', function () {
+    metodos.forEach(div => div.classList.add('hidden'));
+    const metodoSelecionado = this.value;
+
+    if (metodoSelecionado === 'pix') {
+        document.getElementById('pagamento-pix').classList.remove('hidden');
+    } else if (metodoSelecionado === 'cartao') {
+        document.getElementById('pagamento-cartao').classList.remove('hidden');
+    } else if (metodoSelecionado === 'boleto') {
+        document.getElementById('pagamento-boleto').classList.remove('hidden');
+    }
+});
+
 // PayPal
 paypal.Buttons({
     createOrder: function(data, actions) {

@@ -16,6 +16,13 @@ class Customer(models.Model):
     
 
 class Produto(models.Model):
+    CATEGORIAS = [
+        ('eletronicos', 'Eletrônicos'),
+        ('roupas', 'Roupas'),
+        ('livros', 'Livros'),
+        ('acessorios', 'Acessórios'),
+        ('outros', 'Outros'),
+    ]
     nome = models.CharField(max_length=200, null=True)
     preço = models.DecimalField(max_digits=7, decimal_places=2)
     digital = models.BooleanField(default=False, null=True, blank=True)
@@ -28,6 +35,8 @@ class Produto(models.Model):
     descricao = models.TextField(null=True, blank=True)
     descricao_longa = models.TextField(null=True, blank=True)  # descrição detalhada
     caracteristicas = models.TextField(null=True, blank=True)  # características técnicas
+    categoria = models.CharField(max_length=50, choices=CATEGORIAS, default='outros')
+    
     def __str__(self):
         return self.nome
     
@@ -197,4 +206,9 @@ class Avaliacao(models.Model):
 
 
 
+class ImagemProduto(models.Model):
+    produto = models.ForeignKey(Produto, on_delete=models.CASCADE, related_name='imagens_extra')
+    imagem = models.ImageField(upload_to='imagens_produtos/')
 
+    def __str__(self):
+        return f"Imagem de {self.produto.nome}"

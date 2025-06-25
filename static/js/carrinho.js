@@ -1,7 +1,10 @@
 const buttons = document.querySelectorAll('.update-cart');
 
 buttons.forEach(button => {
-    button.addEventListener('click', () => {
+    button.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation(); // 👈 garante que não propague para o link pai
+
         const productId = button.dataset.product;
         const action = button.dataset.action;
         updateCarrinho(productId, action);
@@ -22,11 +25,14 @@ function updateCarrinho(productId, action) {
     .then(res => res.json())
     .then(data => {
         console.log('Item atualizado:', data);
-        location.reload();
+
+        const cartTotal = document.getElementById('cart-total');
+        if (cartTotal && data.total_itens !== undefined) {
+            cartTotal.innerText = data.total_itens;
+        }
     });
 }
 
-// Pega CSRF Token
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
