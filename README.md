@@ -1,3 +1,6 @@
+
+# 🛒 virtual store - v4
+
 ## 🇺🇸 English Version
 
 ### 📌 Description
@@ -26,8 +29,6 @@ This project is a fully-featured online store built with **Django**. **Version 4
 
 ---
 
-
-# 🛒 Loja Virtual - v4
 
 ## 🇧🇷 Versão em Português
 
