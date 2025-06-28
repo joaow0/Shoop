@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 import datetime
@@ -9,6 +9,17 @@ from .utils import cookiecarrinho, carrinhodata, pedidoguest
 from django.contrib import messages
 from django.db.models import Avg  # importante pra aggregate funcionar sem erro
 from random import sample
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import UserCreationForm
+from .forms import *
+from django.contrib.admin.views.decorators import staff_member_required
+from django.db.models import Sum, Count
+from decimal import Decimal
+from django.views.decorators.http import require_POST
+from datetime import timedelta
+from django.utils import timezone
+
+
 
 def loja(request):
     data = carrinhodata(request)
@@ -212,8 +223,8 @@ def produtoDetalhes(request, pk):
 
 
 
-def produtoDetalhes(request, pk):
-    produto = get_object_or_404(Produto, id=pk)
+def produtoDetalhes(request, slug):
+    produto = get_object_or_404(Produto, slug=slug)
     avaliacoes = Avaliacao.objects.filter(produto=produto)
 
     media = avaliacoes.aggregate(Avg('nota'))['nota__avg'] or 0
@@ -278,3 +289,125 @@ def pesquisa(request):
         'ordenar': ordenar,
     }
     return render(request, 'loja/pesquisa.html', contexto)
+
+
+
+def registro(request):
+    if request.method == 'POST':
+        form = FormRegistro(request.POST)
+        if form.is_valid():
+            form.save()  # Cria o User e o Customer via forms.py
+            return redirect('login')
+    else:
+        form = FormRegistro()
+
+    return render(request, 'loja/registro.html', {'form': form})
+
+
+
+@login_required
+def perfil(request):
+    cliente = Customer.objects.get(usuario=request.user)
+    pedidos = Pedido.objects.filter(cliente=cliente, completo=True).order_by('-data_pedido')
+
+    contexto = {
+        'cliente': cliente,
+        'pedidos': pedidos
+    }
+    return render(request, 'loja/perfil.html', contexto)
+
+
+
+
+@staff_member_required
+def dashboard_admin(request):
+    pedidos = Pedido.objects.filter(completo=True)
+    total_vendas = Decimal('0.00')
+    total_pedidos = pedidos.count()
+    total_itens_vendidos = 0
+
+    for pedido in pedidos:
+        total_vendas += pedido.get_cart_total
+        total_itens_vendidos += pedido.get_cart_items
+
+    produtos_mais_vendidos = (
+        PedidoItem.objects.filter(pedido__completo=True)
+        .values('produto__nome')
+        .annotate(total_vendido=Sum('quantidade'))
+        .order_by('-total_vendido')[:10]
+    )
+
+    total_estoque = Produto.objects.aggregate(total=Sum('estoque'))['total'] or 0
+
+    contexto = {
+        'total_vendas': total_vendas,
+        'total_pedidos': total_pedidos,
+        'total_itens_vendidos': total_itens_vendidos,
+        'produtos_mais_vendidos': produtos_mais_vendidos,
+        'total_estoque': total_estoque,
+    }
+
+    return render(request, 'loja/dashboard_admin.html', contexto)
+
+
+
+
+@login_required
+@require_POST
+def finalizar_compra(request):
+    cliente = Customer.objects.get(usuario=request.user)
+    pedido = Pedido.objects.filter(cliente=cliente, completo=False).first()
+
+    if not pedido:
+        messages.error(request, 'Nenhum pedido em aberto encontrado.')
+        return redirect('carrinho')
+
+    # Marca como finalizado
+    pedido.completo = True
+    pedido.save()
+
+    # (opcional) Redireciona para o perfil com mensagem
+    messages.success(request, 'Compra finalizada com sucesso!')
+    return redirect('perfil')
+
+
+
+
+
+
+@staff_member_required
+def exportar_csv(request):
+    filtro = request.GET.get('filtro', '7')
+    hoje = timezone.now().date()
+
+    if filtro == '7':
+        data_inicio = hoje - timedelta(days=7)
+    elif filtro == '30':
+        data_inicio = hoje - timedelta(days=30)
+    elif filtro == 'mes':
+        data_inicio = hoje.replace(day=1)
+    else:
+        data_inicio = None  # todos
+
+    pedidos = Pedido.objects.filter(completo=True)
+    if data_inicio:
+        pedidos = pedidos.filter(data_pedido__gte=data_inicio)
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="relatorio_vendas.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['Data', 'Cliente', 'Produto', 'Quantidade', 'Preço Unitário', 'Total'])
+
+    for pedido in pedidos:
+        for item in pedido.pedidoitem_set.all():
+            writer.writerow([
+                pedido.data_pedido.strftime('%d/%m/%Y'),
+                pedido.cliente.nome if pedido.cliente else 'N/A',
+                item.produto.nome if item.produto else 'N/A',
+                item.quantidade,
+                f'{item.produto.preço:.2f}' if item.produto else '0.00',
+                f'{item.get_total:.2f}'
+            ])
+
+    return response

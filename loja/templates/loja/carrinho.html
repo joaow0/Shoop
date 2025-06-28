@@ -32,33 +32,47 @@
             </div>
 
             {% for item in itens %}
-            <div class="d-flex flex-column flex-md-row align-items-center border-bottom py-3">
-                <div class="col-md-2 mb-2 mb-md-0">
-                    <img src="{{ item.produto.imagemURL }}"
-                         class="img-fluid rounded shadow-sm" style="max-height: 80px;">
-                </div>
-                <div class="col-md-4 mb-2 mb-md-0 text-center text-md-start">
-                    <h6>{{ item.produto.nome }}</h6>
-                </div>
-                <div class="col-md-2 mb-2 mb-md-0">
-                    <span>{{ item.produto.preço|moeda_br }}</span>
-                </div>
-                <div class="col-md-2 mb-2 mb-md-0">
-                    <div class="d-flex flex-column align-items-center">
-                        <p class="mb-1">{{ item.quantidade }}</p>
-                        <div class="d-flex flex-column">
-                            <img data-product="{{ item.produto.id }}" data-action="add" class="chg-quantity update-cart mb-1"
-                                 src="{% static 'imagens/arrow-up.png' %}" style="width: 18px; cursor: pointer;">
-                            <img data-product="{{ item.produto.id }}" data-action="remove" class="chg-quantity update-cart"
-                                 src="{% static 'imagens/arrow-down.png' %}" style="width: 18px; cursor: pointer;">
+                {% if item.produto %}
+                <div class="d-flex flex-column flex-md-row align-items-center border-bottom py-3"
+                    data-prod-linha="{{ item.produto.id }}"> <!-- <- para remover o item se a quantidade for 0 -->
+
+                    <div class="col-md-2 mb-2 mb-md-0">
+                        <img src="{{ item.produto.imagemURL }}"
+                            class="img-fluid rounded shadow-sm" style="max-height: 80px;">
+                    </div>
+
+                    <div class="col-md-4 mb-2 mb-md-0 text-center text-md-start">
+                        <h6>{{ item.produto.nome }}</h6>
+                    </div>
+
+                    <div class="col-md-2 mb-2 mb-md-0">
+                        <span>{{ item.produto.preço|moeda_br }}</span>
+                    </div>
+
+                    <div class="col-md-2 mb-2 mb-md-0">
+                        <div class="d-flex flex-column align-items-center">
+                            <p class="mb-1" data-prod-id-qtd="{{ item.produto.id }}">{{ item.quantidade }}</p> <!-- <- Atualiza aqui -->
+                            <div class="d-flex flex-column">
+                                <img data-product="{{ item.produto.id }}" data-action="add"
+                                    class="chg-quantity update-cart mb-1"
+                                    src="{% static 'imagens/arrow-up.png' %}"
+                                    style="width: 18px; cursor: pointer;">
+                                <img data-product="{{ item.produto.id }}" data-action="remove"
+                                    class="chg-quantity update-cart"
+                                    src="{% static 'imagens/arrow-down.png' %}"
+                                    style="width: 18px; cursor: pointer;">
+                            </div>
                         </div>
                     </div>
+
+                    <div class="col-md-2">
+                        <span data-prod-id-total="{{ item.produto.id }}">{{ item.get_total|moeda_br }}</span> <!-- <- Atualiza aqui -->
+                    </div>
+
                 </div>
-                <div class="col-md-2">
-                    <span>{{ item.get_total|moeda_br }}</span>
-                </div>
-            </div>
+                {% endif %}
             {% endfor %}
+
         </div>
     </div>
 </div>

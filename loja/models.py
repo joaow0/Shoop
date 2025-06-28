@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 #User é um modelo simples de cadastro/login nativo do django, irá ser usado nesse exemplo
-
+from django.utils.text import slugify
 
 class Customer(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -10,10 +10,30 @@ class Customer(models.Model):
     #null=True: permite que a descrição fique nula (NULL) no banco.  
     nome = models.CharField(max_length=200, null=True)
     email = models.CharField(max_length=200)
+    # Campos adicionais
+    cpf_cnpj = models.CharField(max_length=20, unique=True, null=True, blank=True)
+    rg = models.CharField(max_length=20, null=True, blank=True)
+    data_nascimento = models.DateField(null=True, blank=True)
+    genero = models.CharField(max_length=20, choices=[('M', 'Masculino'), ('F', 'Feminino'), ('O', 'Outro')], null=True, blank=True)
+
+    telefone_celular = models.CharField(max_length=20, null=True, blank=True)
+    telefone_fixo = models.CharField(max_length=20, null=True, blank=True)
+
+    rua = models.CharField(max_length=255, null=True, blank=True)
+    numero = models.CharField(max_length=10, null=True, blank=True)
+    complemento = models.CharField(max_length=100, null=True, blank=True)
+    bairro = models.CharField(max_length=100, null=True, blank=True)
+    cidade = models.CharField(max_length=100, null=True, blank=True)
+    estado = models.CharField(max_length=2, null=True, blank=True)
+    cep = models.CharField(max_length=10, null=True, blank=True)
+
+    preferencias = models.TextField(null=True, blank=True)
+    data_cadastro = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.nome
     
+
 
 class Produto(models.Model):
     CATEGORIAS = [
@@ -33,10 +53,23 @@ class Produto(models.Model):
     imagem = models.ImageField(null=True, blank=True)
     #imagens carregadas 
     descricao = models.TextField(null=True, blank=True)
-    descricao_longa = models.TextField(null=True, blank=True)  # descrição detalhada
+    #descricao_longa = models.TextField(null=True, blank=True)  # descrição detalhada
     caracteristicas = models.TextField(null=True, blank=True)  # características técnicas
     categoria = models.CharField(max_length=50, choices=CATEGORIAS, default='outros')
+    estoque = models.IntegerField(default=0)
+    slug = models.SlugField(unique=True, blank=True, null=True)
     
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(self.nome)
+            slug_unico = base_slug
+            contador = 1
+            while Produto.objects.filter(slug=slug_unico).exists():
+                slug_unico = f"{base_slug}-{contador}"
+                contador += 1
+            self.slug = slug_unico
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.nome
     
@@ -98,33 +131,27 @@ class Pedido(models.Model):
     def __str__(self):
         return str(self.id)
     
-    #com essa função, vamos conseguir calcular o total de todos os produtos no carrinho(R$)
     @property
     def get_cart_total(self):
-        pedidoitem = self.pedidoitem_set.all()
+        pedidoitem = self.pedidoitem_set.filter(produto__isnull=False)
         total = sum([item.get_total for item in pedidoitem])
-        # for item in pedidoitem:item.get_total
         return total
 
-
-    #esse aqui vai calcular o total da quantidade de produtos
     @property
     def get_cart_items(self):
-        pedidoitem = self.pedidoitem_set.all()
+        pedidoitem = self.pedidoitem_set.filter(produto__isnull=False)
         total = sum(item.quantidade for item in pedidoitem)
         return total
-    
 
-    #essa é a configuração pro checkout do produto, pq o cliente pode escolher tanto digital quanto fisico, se for fisico, então as barras de endereço tem que aparecer, mas se forem digital, então o produto é enviado por email na verdade
     @property
     def envio(self):
         envio = False
-        pedidoitens = self.pedidoitem_set.all()
+        pedidoitens = self.pedidoitem_set.filter(produto__isnull=False)
         for i in pedidoitens:
-            if i.produto.digital == False:
+            if not i.produto.digital:
                 envio = True
-            
         return envio
+
 
 
 class PedidoItem(models.Model):

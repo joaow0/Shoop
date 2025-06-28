@@ -1,10 +1,17 @@
 .card {
     border-radius: 8px;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}
+
+.card-body {
+    background-color: var(--card-bg);
+    color: var(--text-color);
 }
 
 .card-body img {
     border-radius: 6px;
-    border: 1px solid #eee;
+    border: 1px solid #ccc;
 }
 
 h6 {

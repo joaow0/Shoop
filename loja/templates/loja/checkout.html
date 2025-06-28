@@ -97,7 +97,10 @@
                         <label class="form-label">Nome no Cartão</label>
                         <input class="form-control" type="text" placeholder="Nome completo">
                     </div>
-                    <button class="btn btn-success w-100">Finalizar Pagamento</button>
+                    <form action="{% url 'finalizar_compra' %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success w-100">Finalizar Pagamento</button>
+                    </form>
                 </div>
 
                 <!-- BOLETO -->

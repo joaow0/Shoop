@@ -11,34 +11,9 @@
     <h1 class="mb-4 text-center fw-bold">🛍️ Bem-vindo à nossa Loja!</h1>
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        {% for produto in produtos %}
-            <div class="col fade-in">
-                <div class="card h-100 border-0 d-flex flex-column">
-                    <!-- Link apenas na imagem e no conteúdo -->
-                    <a href="{% url 'produto' produto.id %}" class="text-decoration-none text-dark">
-                        <img class="card-img-top" src="{{ produto.imagemURL }}" alt="{{ produto.nome }}" 
-                            style="object-fit: cover; height: 220px;">
-                        <div class="card-body">
-                            <h5 class="card-title fw-semibold fs-4">{{ produto.nome }}</h5>
-                            <p class="card-text text-muted mb-3">{{ produto.descricao }}</p>
-                        </div>
-                    </a>
-                    <!-- Rodapé com preço e botão -->
-                    <div class="card-footer bg-transparent border-0 d-flex justify-content-between align-items-center px-3 pb-3 mt-auto">
-                        <h4 class="text-success mb-0">
-                            <strong>{{ produto.preço|moeda_br }}</strong>
-                        </h4>
-                        <button 
-                            type="button"
-                            data-product="{{ produto.id }}" 
-                            data-action="add" 
-                            class="btn btn-outline-primary add-btn update-cart">
-                            🛒 Adicionar
-                        </button>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
+    {% for produto in produtos %}
+        {% include 'loja/card_produto.html' %}
+    {% endfor %}
     </div>
 </div>
 {% endblock %}

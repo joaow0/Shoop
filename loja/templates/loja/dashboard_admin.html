@@ -1,0 +1,118 @@
+{% extends 'loja/main.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">📊 Dashboard Administrativo</h2>
+        <form method="get">
+            <select name="filtro" class="form-select" onchange="this.form.submit()">
+                <option value="7" {% if filtro == '7' %}selected{% endif %}>Últimos 7 dias</option>
+                <option value="30" {% if filtro == '30' %}selected{% endif %}>Últimos 30 dias</option>
+                <option value="mes" {% if filtro == 'mes' %}selected{% endif %}>Este mês</option>
+                <option value="todos" {% if filtro == 'todos' %}selected{% endif %}>Todos os pedidos</option>
+            </select>
+        </form>
+    </div>
+
+    <!-- Cards principais -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="card shadow text-center p-4">
+                <h6 class="text-muted">Total de Vendas</h6>
+                <h4 class="text-success">R$ {{ total_vendas|floatformat:2 }}</h4>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow text-center p-4">
+                <h6 class="text-muted">Pedidos Finalizados</h6>
+                <h4>{{ total_pedidos }}</h4>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow text-center p-4">
+                <h6 class="text-muted">Produtos Vendidos</h6>
+                <h4>{{ total_itens_vendidos }}</h4>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow text-center p-4">
+                <h6 class="text-muted">Produtos em Estoque</h6>
+                <h4>{{ total_estoque }}</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráfico de vendas -->
+    <div class="card shadow p-4 mb-5">
+        <h5 class="fw-bold mb-3">📈 Vendas por Dia</h5>
+        <canvas id="graficoVendas" height="100"></canvas>
+    </div>
+
+    <!-- Produtos mais vendidos -->
+    <h5 class="fw-bold mb-3">🏆 Produtos Mais Vendidos</h5>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Total Vendido</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in produtos_mais_vendidos %}
+            <tr>
+                <td>{{ item.produto__nome }}</td>
+                <td>{{ item.total_vendido }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Alerta de estoque baixo -->
+    <h5 class="fw-bold mt-5 text-danger">⚠️ Produtos com Baixo Estoque</h5>
+    {% if produtos_baixo_estoque %}
+    <ul class="list-group mb-4">
+        {% for produto in produtos_baixo_estoque %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ produto.nome }}
+            <span class="badge bg-danger">{{ produto.estoque }} unidades</span>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-muted">Nenhum produto com estoque crítico.</p>
+    {% endif %}
+
+    <!-- Exportar CSV -->
+    <a href="{% url 'exportar_csv' %}?filtro={{ filtro }}" class="btn btn-outline-primary">⬇️ Exportar CSV</a>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('graficoVendas').getContext('2d');
+    const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ dias|safe }},
+            datasets: [{
+                label: 'Total vendido (R$)',
+                data: {{ totais|safe }},
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

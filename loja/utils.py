@@ -50,6 +50,9 @@ def carrinhodata(request):
         )
         pedido, _ = Pedido.objects.get_or_create(cliente=cliente, completo=False)
 
+        # Remove itens com produto deletado (produto=None)
+        pedido.pedidoitem_set.filter(produto__isnull=True).delete()
+
         itens = pedido.pedidoitem_set.all()
         carrinhoitens = pedido.get_cart_items
     else:
@@ -59,6 +62,8 @@ def carrinhodata(request):
         itens = cookiedata['itens']
 
     return {'carrinhoitens': carrinhoitens, 'pedido': pedido, 'itens': itens}
+
+
 
 def pedidoguest(request, data):
     nome = data['form'].get('nome')

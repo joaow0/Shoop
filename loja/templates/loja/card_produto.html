@@ -1,0 +1,43 @@
+{% load format_tags %}
+<div class="col fade-in">
+  <div class="card h-100 border-0 shadow-sm d-flex flex-column">
+    <a href="{% url 'produto' produto.slug %}" class="text-decoration-none text-dark">
+      <img class="card-img-top"
+           src="{{ produto.imagemURL }}"
+           alt="{{ produto.nome }}"
+           style="object-fit: cover; height: 220px;">
+      <div class="card-body d-flex flex-column">
+        <h6 class="fw-bold mb-1" style="min-height: 48px;">{{ produto.nome }}</h6>
+
+        <div class="mb-2">
+          {% with produto.media_avaliacao as media %}
+            {% for _ in "12345" %}
+              {% if media >= forloop.counter %}
+                <i class="bi bi-star-fill text-warning"></i>
+              {% else %}
+                <i class="bi bi-star text-warning"></i>
+              {% endif %}
+            {% endfor %}
+            <small class="text-muted ms-2">({{ produto.total_avaliacoes }})</small>
+          {% endwith %}
+        </div>
+
+        <p class="card-text text-muted small mb-2 text-truncate-2">
+          {{ produto.descricao|default:"" }}
+        </p>
+
+        <h5 class="text-success fw-semibold mt-auto">
+           {{ produto.preço|moeda_br }}
+        </h5>
+      </div>
+    </a>
+
+    <div class="card-footer bg-transparent border-0 px-3 pb-3">
+      <button data-product="{{ produto.id }}"
+              data-action="add"
+              class="btn btn-sm btn-outline-primary w-100 update-cart">
+        🛒 Adicionar
+      </button>
+    </div>
+  </div>
+</div>

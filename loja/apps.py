@@ -6,4 +6,5 @@ class LojaConfig(AppConfig):
     name = 'loja'
 
     def ready(self):
-        import loja.signals
+        pass
+        #import loja.signals

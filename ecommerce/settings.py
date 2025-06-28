@@ -124,18 +124,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
+    os.path.join(BASE_DIR, 'static')]
 
-]#essa é a configuração para o statics
+#essa é a configuração para o statics
 #ela serve pra informar ao django onde procurar arquivos estáticos adicionais durante o desenvovlimento, como css, js, imagens e etc...
 #BASE_DIR é o diretório base do projeto (onde está o manage.py).
 #os.path.join(BASE_DIR, 'static') cria o caminho completo da pasta static global.
 
 
 #O MEDIA_URL diz ao Django qual caminho na URL corresponde aos arquivos salvos via upload.
-MEDIA_URL = '/imagens/'
+MEDIA_URL = '/media/'
 
 
 
 #esse aqui vai servir para as imagens dinamicas
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/imagens')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+LOGIN_REDIRECT_URL = 'loja'  # ou 'perfil' se preferir ir para a conta do usuário

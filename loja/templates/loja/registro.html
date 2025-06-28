@@ -1,0 +1,37 @@
+{% extends 'loja/main.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5" style="max-width: 700px;">
+    <div class="text-center mb-4">
+        <h2 class="fw-bold"><i class="bi bi-person-plus-fill me-2"></i> Criar Conta</h2>
+    </div>
+
+    <form method="POST" novalidate>
+        {% csrf_token %}
+
+        <!-- MENSAGENS DE ERRO -->
+        {% for field in form %}
+            <div class="mb-3">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.errors %}
+                    <div class="text-danger small mt-1">
+                        {% for error in field.errors %}
+                            <div>{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <hr class="my-4">
+
+        <button type="submit" class="btn btn-primary w-100">Registrar</button>
+    </form>
+
+    <div class="text-center mt-3">
+        Já tem uma conta? <a href="{% url 'login' %}">Entrar</a>
+    </div>
+</div>
+{% endblock %}

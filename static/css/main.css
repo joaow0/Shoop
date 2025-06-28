@@ -34,3 +34,139 @@
     background-color: white;
     color: #2563eb;
 }
+
+
+:root {
+    --bg-color: #ffffff;
+    --text-color: #111111;
+    --card-bg: #f8f9fa;
+    --navbar-bg: #2563eb;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.card, .box-element {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}
+
+.custom-navbar {
+    background-color: var(--navbar-bg) !important;
+}
+
+/* Tema escuro */
+body.dark-mode {
+    --bg-color: #121212;
+    --text-color: #f1f1f1;
+    --card-bg: #1e1e1e;
+    --navbar-bg: #111827;
+}
+
+body.dark-mode .custom-navbar,
+body.dark-mode .bg-primary {
+    background-color: var(--navbar-bg) !important;
+}
+
+body.dark-mode a,
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6 {
+    color: var(--text-color);
+}
+
+
+/* Correção para modo escuro em componentes dinâmicos */
+.card-body,
+.card,
+.box-element {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color) !important;
+}
+
+/* Corrige botão do dark mode */
+body.dark-mode .btn-outline-light {
+    border-color: var(--text-color);
+    color: var(--text-color);
+}
+
+body.dark-mode .btn-outline-light:hover {
+    background-color: var(--text-color);
+    color: var(--bg-color);
+}
+
+
+.container,
+.row,
+.col,
+.col-md-*, 
+.col-lg-*,
+main,
+section {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.card,
+.card-body,
+.box-element {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color) !important;
+}
+
+
+/* --- Correções adicionais para modo escuro --- */
+
+body.dark-mode .text-muted {
+    color: #aaaaaa !important;
+}
+
+body.dark-mode .card-title,
+body.dark-mode .card-text,
+body.dark-mode .card-body,
+body.dark-mode .card-footer,
+body.dark-mode .fw-bold,
+body.dark-mode .fw-semibold,
+body.dark-mode p,
+body.dark-mode li,
+body.dark-mode label,
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6 {
+    color: var(--text-color) !important;
+}
+
+body.dark-mode .list-group-item {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color) !important;
+}
+
+body.dark-mode .text-muted {
+    color: var(--text-color) !important;
+    opacity: 0.7; /* opcional para deixar levemente mais suave */
+}
+
+/* Trunca descrição em 2 linhas */
+.text-truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 42px;
+}
+
+/* Gutter maior em mobile */
+@media (max-width: 576px) {
+  .row.g-4 {
+    --bs-gutter-x: 1rem;
+    --bs-gutter-y: 1rem;
+  }
+}

@@ -32,3 +32,26 @@ if (!cart || Object.keys(cart).length === 0) {
     document.cookie = 'cart=' + JSON.stringify(cart) + ';path=/;SameSite=Lax';
 }
 console.log('Cart:', cart);
+
+
+document.addEventListener('DOMContentLoaded', function () {
+  const toggleBtn = document.getElementById('toggle-dark');
+
+  // Força o modo escuro caso localStorage diga isso (garantia)
+  const savedTheme = localStorage.getItem('tema');
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+  }
+
+  // Clique no botão para alternar
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      const isDark = document.body.classList.toggle('dark-mode');
+      const tema = isDark ? 'dark' : 'light';
+      localStorage.setItem('tema', tema);
+
+      // Salvar também em cookie (para uso no backend)
+      document.cookie = `tema=${tema};path=/;SameSite=Lax`;
+    });
+  }
+});
