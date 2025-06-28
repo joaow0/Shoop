@@ -1,67 +1,63 @@
-## ENGLISH
+## 🇺🇸 English Version
 
+### 📌 Description
+This project is a fully-featured online store built with **Django**. **Version 4** introduces major improvements in usability, visual design, product navigation, and admin features. It is being developed with the support of **Artificial Intelligence (AI)** to ensure optimal structure, performance, and design.
 
-# 🛍️ Ecom - Online Store (v3)
+### ✅ Features implemented today
 
-Welcome to the **third version** of **Ecom**, a modern and minimalist e-commerce platform. This version adds visual and functional improvements that bring the store closer to a complete and professional shopping experience.
+#### 1. 🌙 Dark Mode
+- Implemented **dark mode** across the entire site
+- Toggle button in the navbar lets users switch between light and dark themes
+- User preference is saved locally
 
-## ✅ What's New (v3)
+#### 2. 📊 Custom Administrative Dashboard (outside Django Admin)
+- Displays **Total Sales**
+- Shows **Number of Orders**
+- Lists the **Top-Selling Products**
+- Section for **Stock Management** based on current product data
 
-- 💳 **Payment method simulation** (Pix, Credit Card, Boleto - illustrative only)
-- 🖼️ **Modern product gallery layout** with central zoom effect
-- 📦 **Working search bar** for product search
-- 🧭 **Sorting options** (lowest to highest price and vice versa)
-- 📄 **Footer with:**
-  - About Us
-  - Terms of Use
-  - Social media links (Instagram, Facebook, Twitter/X)
-  - Contact email and WhatsApp number
-
-## ⚙️ Tech Stack
-
-- Python / Django
-- HTML, CSS (Bootstrap 5), JavaScript (vanilla)
-- Template engine: Django Templating Language
-- Layout powered by Bootstrap grid system and responsive utilities
-
-> This project is still in progress and being refined to reach production-level polish.
-
----
-
-💡 All development is being carried out with the support of AI (ChatGPT) for coding, layout decisions, and optimization suggestions.
+#### 3. 🔗 SEO-Friendly URLs with Slug Support
+- Product URLs now use **name-based slugs** instead of numeric IDs  
+  - Example:  
+    **From:** `/product/3/`  
+    **To:** `/product/camiseta-amarela/`
+- Slugs are automatically generated with `slugify` in the product model
+- Greatly improves **SEO** and user experience
 
 ---
 
 
-## PORTUGUÊS
+# 🛒 Loja Virtual - v4
 
-# 🛍️ Ecom - Loja Online (v3)
+## 🇧🇷 Versão em Português
 
-Bem-vindo à **terceira versão** do **Ecom**, uma plataforma de e-commerce moderna e minimalista. Esta versão traz melhorias visuais e funcionais que aproximam a loja de uma experiência de compra completa e profissional.
+### 📌 Descrição
+Este projeto é uma loja virtual completa desenvolvida com **Django**. A **versão 4** traz melhorias importantes em usabilidade, visualização de produtos, aparência e controle administrativo. O projeto está sendo desenvolvido com o apoio de **Inteligência Artificial (IA)** para otimizar o design, estrutura e funcionalidades.
 
-## ✅ Novidades da Versão 3
+### ✅ Funcionalidades implementadas hoje
 
-- 💳 **Simulação de métodos de pagamento** (Pix, Cartão de Crédito e Boleto - apenas ilustrativo)
-- 🖼️ **Layout moderno de galeria de produtos** com zoom centralizado
-- 📦 **Barra de pesquisa funcional** para busca de produtos
-- 🧭 **Filtros de ordenação** (do menor para o maior preço e vice-versa)
-- 📄 **Rodapé com:**
-  - Sobre nós
-  - Termos de uso
-  - Redes sociais (Instagram, Facebook, Twitter/X)
-  - Email e WhatsApp para contato
+#### 1. 🌙 Modo Escuro (Dark Mode)
+- Implementado **modo escuro** para toda a loja
+- Botão na barra de navegação permite alternar entre modo claro e escuro
+- Preferência do usuário é armazenada localmente
 
-## ⚙️ Tecnologias utilizadas
+#### 2. 📊 Dashboard Administrativo Personalizado (fora do Django Admin)
+- Visualização do **Total de Vendas**
+- Contagem da **Quantidade de Pedidos**
+- Lista dos **Produtos mais Vendidos**
+- Seção para **Gerenciamento de Estoque** com base nos dados dos produtos
 
-- Python / Django
-- HTML, CSS (Bootstrap 5), JavaScript (vanilla)
-- Template engine: Django Templating Language
-- Layout baseado no sistema de grid do Bootstrap com responsividade
-
-> Este projeto ainda está em desenvolvimento e sendo refinado para alcançar um nível de produção profissional.
-
----
-
-💡 Todo o desenvolvimento está sendo feito com o apoio da IA (ChatGPT), que auxilia na codificação, organização e otimização do layout e funcionalidades.
+#### 3. 🔗 URLs Amigáveis (Friendly URLs) e SEO
+- URLs dos produtos agora usam **slugs baseados no nome** em vez de IDs
+  - Exemplo:  
+    **De:** `/produto/3/`  
+    **Para:** `/produto/camiseta-amarela/`
+- Slugs são gerados automaticamente com `slugify` no modelo do produto
+- Melhoria significativa para **SEO** e experiência do usuário
 
 ---
+
+
+
+🧠 _Desenvolvido com o apoio da IA (ChatGPT), para uma implementação otimizada e profissional._  
+🧠 _Developed with the help of AI (ChatGPT), for a professional and optimized implementation._
