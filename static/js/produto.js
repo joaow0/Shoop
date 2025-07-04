@@ -1,3 +1,5 @@
+// static/js/produto.js - ATUALIZADO
+
 function trocarImagem(src, thumb) {
     const principal = document.getElementById('imagem-principal');
     const zoomPreview = document.getElementById('zoom-preview');
@@ -52,3 +54,13 @@ window.addEventListener('DOMContentLoaded', () => {
         preview.style.backgroundSize = `${img.width * zoom}px ${img.height * zoom}px`;
     });
 });
+
+function scrollContainer(direction) {
+    const container = document.getElementById('scroll-container');
+    const scrollAmount = 300;
+    if (direction === 'left') {
+        container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    } else {
+        container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+}

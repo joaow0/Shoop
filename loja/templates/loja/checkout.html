@@ -120,18 +120,21 @@
                 <hr>
 
                 {% for item in itens %}
-                <div class="d-flex align-items-center mb-3" style="gap: 10px;">
-                    <img src="{{ item.produto.imagemURL }}" class="rounded" style="width: 70px; height: 70px; object-fit: cover;">
-                    <div class="flex-grow-1">
-                        <h6 class="mb-1">{{ item.produto.nome }}</h6>
-                        <small>{{ item.quantidade }} x {{ item.produto.preço|moeda_br }}</small>
+                <div class="d-flex align-items-center justify-content-between gap-2 mb-3" style="flex-wrap: nowrap;">
+                    <img src="{{ item.produto.imagemURL }}"
+                        alt="Imagem do produto"
+                        style="width: 64px; height: 64px; object-fit: contain; flex-shrink: 0; border: 1px solid #ccc; border-radius: 8px;">
+                    
+                    <div class="flex-grow-1 text-truncate">
+                        <h6 class="mb-1 text-truncate" style="max-width: 100%; font-size: 0.95rem;">{{ item.produto.nome }}</h6>
+                        <small class="text-muted">{{ item.quantidade }} x {{ item.produto.preço|moeda_br }}</small>
                     </div>
-                    <div>
+                    
+                    <div class="text-end" style="white-space: nowrap;">
                         <strong>{{ item.get_total|moeda_br }}</strong>
                     </div>
                 </div>
                 {% endfor %}
-
                 <hr>
 
                 <div class="d-flex justify-content-between">

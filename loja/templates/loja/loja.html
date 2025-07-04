@@ -15,6 +15,33 @@
         {% include 'loja/card_produto.html' %}
     {% endfor %}
     </div>
+
+    <!-- Paginação -->
+    <nav class="d-flex justify-content-center mt-4">
+      <ul class="pagination">
+        {% if produtos.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ produtos.previous_page_number }}">Anterior</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">Anterior</span></li>
+        {% endif %}
+
+        {% for num in produtos.paginator.page_range %}
+          <li class="page-item {% if produtos.number == num %}active{% endif %}">
+            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+          </li>
+        {% endfor %}
+
+        {% if produtos.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ produtos.next_page_number }}">Próxima</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">Próxima</span></li>
+        {% endif %}
+      </ul>
+    </nav>
 </div>
 {% endblock %}
 

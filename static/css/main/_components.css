@@ -1,0 +1,39 @@
+.scroll-horizontal-container {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 1rem;
+}
+
+.scroll-horizontal-container::-webkit-scrollbar {
+    display: none;
+}
+
+.scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    background-color: white;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.scroll-left { left: -18px; }
+.scroll-right { right: -18px; }
+
+.badge.bg-danger {
+    font-size: 0.75rem;
+    border-radius: 0.4rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}

@@ -1,7 +1,7 @@
 /* Caixa principal */
 .box-element {
-    background-color: var(--card-bg);
-    color: var(--text-color);
+    background-color: var(--card-bg); /* Já está correto, usa a variável */
+    color: var(--text-color);       /* Já está correto, usa a variável */
     border-radius: 12px;
     padding: 20px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
@@ -14,8 +14,9 @@
     border: 1px solid #ccc;
     padding: 12px 16px;
     transition: border-color 0.2s, box-shadow 0.2s;
-    background-color: #f9f9f9;
+    background-color: #f9f9f9; /* Padrão claro */
     font-size: 1rem;
+    color: #212529; /* Cor do texto padrão para modo claro */
 }
 
 .form-control:focus {
@@ -30,6 +31,19 @@
     color: #999;
     opacity: 1;
 }
+
+/* --- Correção para .form-control no modo escuro --- */
+body.dark-mode .form-control {
+    background-color: #2a2a2a; /* Fundo mais escuro para o input */
+    color: #f1f1f1;            /* Texto claro */
+    border-color: #444;       /* Borda para contraste */
+}
+
+/* Correção para placeholder no modo escuro */
+body.dark-mode .form-control::placeholder {
+    color: #aaaaaa; /* Placeholder mais claro e visível */
+}
+
 
 /* Botão continuar */
 #form-button {
@@ -48,29 +62,71 @@
     transform: scale(0.98);
 }
 
+/* --- Correção para #form-button no modo escuro (se for o caso) --- */
+/* Se o botão for afetado pelas variáveis gerais, talvez não precise,
+   mas se quiser garantir, adicione: */
+body.dark-mode #form-button {
+    background-color: #2563eb; /* Use o azul principal do dark mode para botões */
+    color: #ffffff;
+}
+body.dark-mode #form-button:hover {
+    background-color: #1d4ed8;
+}
+
+
 /* Caixa de pagamento (quando aparece) */
 #payment-info {
     border-radius: 12px;
     padding: 20px;
     box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-    background-color: #fff;
+    background-color: #fff; /* Padrão claro */
+    color: #212529; /* Cor do texto padrão para modo claro */
 }
 
-/* Resumo do pedido */
+/* --- Correção para #payment-info no modo escuro --- */
+body.dark-mode #payment-info {
+    background-color: #1f1f1f; /* Fundo escuro */
+    color: #f1f1f1;            /* Texto claro */
+}
+
+
+/* Resumo do pedido (já deve estar ok pelo .box-element) */
 .box-element h6 {
     font-weight: 600;
     margin-bottom: 4px;
 }
 
 .box-element small {
-    color: #6c757d;
+    color: #6c757d; /* Padrão claro */
 }
+
+/* --- Correção para small e outros textos específicos no modo escuro --- */
+body.dark-mode .box-element small {
+    color: #aaaaaa; /* Cinza claro para textos de "small" */
+}
+
+/* Se houver outros textos que não sejam h1-h6, p, li, label,
+   que precisam de cor específica no modo escuro dentro do box-element
+   ou do #payment-info, adicione aqui: */
+body.dark-mode .box-element strong,
+body.dark-mode #payment-info p,
+body.dark-mode #payment-info label,
+body.dark-mode #metodo-pagamento { /* Para o select */
+    color: var(--text-color); /* Garante que use a cor de texto global do dark mode */
+}
+
 
 /* Imagens dos produtos */
 .box-element img {
     border-radius: 10px;
-    border: 1px solid #eaeaea;
+    border: 1px solid #eaeaea; /* Padrão claro */
 }
+
+/* --- Correção para a borda da imagem no modo escuro --- */
+body.dark-mode .box-element img {
+    border-color: #333; /* Borda mais escura para contraste */
+}
+
 
 /* Oculta elemento */
 .hidden {
@@ -80,11 +136,48 @@
 .metodo {
     margin-top: 20px;
     padding: 15px;
-    border: 1px dashed #ccc;
+    border: 1px dashed #ccc; /* Padrão claro */
     border-radius: 8px;
-    background-color: #f9f9f9;
+    background-color: #f9f9f9; /* Padrão claro */
+    color: #212529; /* Cor do texto padrão para modo claro */
 }
 
 .metodo.hidden {
     display: none;
+}
+
+/* --- Correção para .metodo no modo escuro --- */
+body.dark-mode .metodo {
+    background-color: #1f1f1f; /* Fundo escuro */
+    border-color: #555;      /* Borda para contraste */
+    color: #f1f1f1;           /* Texto claro */
+}
+
+/* Garante que os inputs dentro de .metodo também sejam escuros */
+body.dark-mode .metodo .form-control {
+    background-color: #2a2a2a !important; /* Mais escuro que o fundo do método */
+    color: #f1f1f1 !important;
+    border-color: #444 !important;
+}
+
+/* Botão dentro de .metodo (ex: Gerar Boleto) */
+body.dark-mode .metodo .btn-outline-secondary {
+    border-color: #6c757d; /* Borda visível */
+    color: #aaaaaa;       /* Texto visível */
+    background-color: transparent;
+}
+
+body.dark-mode .metodo .btn-outline-secondary:hover {
+    background-color: #333;
+    color: #ffffff;
+}
+
+body.dark-mode .metodo .btn-success { /* Botão Finalizar Pagamento do Cartão */
+    background-color: #2563eb !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+body.dark-mode .metodo .btn-success:hover {
+    background-color: #1d4ed8 !important;
 }

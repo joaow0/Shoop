@@ -43,6 +43,46 @@ class Produto(models.Model):
         ('acessorios', 'Acessórios'),
         ('outros', 'Outros'),
     ]
+    TIPOS_ROUPA = [
+        ('camisa', 'Camisa'),
+        ('blusa', 'Blusa de Frio'),
+        ('short', 'Short'),
+        ('calçados', 'Calçados'),
+        ('vestido', 'Vestido'),
+        ('jaqueta', 'Jaqueta'),
+        ('tenis', 'Tênis'),
+        ('outro', 'Outro'),
+    ]   
+    TIPOS_ACESSORIOS = [
+        ('pulseira', 'Pulseira'),
+        ('relogio', 'Relógio'),
+        ('oculos', 'Óculos'),
+        ('boné', 'Boné'),
+        ('mochila', 'Mochila'),
+        ('bolsa', 'Bolsa'),
+        ('colar', 'Colar'),
+        ('brinco', 'Brinco'),
+        ('cinto', 'Cinto'),
+        ('outro', 'Outro'),
+    ]
+
+
+    tipo_acessorio = models.CharField(
+        max_length=50,
+        choices=TIPOS_ACESSORIOS,
+        blank=True,
+        null=True,
+        help_text='Preencha apenas se o produto se encaixar nesse quadro(relógio, pulseira, etc...)'
+    )
+
+
+    tipo_roupa = models.CharField(
+        max_length=50,
+        choices=TIPOS_ROUPA,
+        blank=True,
+        null=True,
+        help_text='Preencha apenas se a categoria for Roupas.'
+    )
     nome = models.CharField(max_length=200, null=True)
     preço = models.DecimalField(max_digits=7, decimal_places=2)
     digital = models.BooleanField(default=False, null=True, blank=True)
@@ -58,7 +98,16 @@ class Produto(models.Model):
     categoria = models.CharField(max_length=50, choices=CATEGORIAS, default='outros')
     estoque = models.IntegerField(default=0)
     slug = models.SlugField(unique=True, blank=True, null=True)
-    
+    preco_desconto = models.DecimalField(
+    max_digits=10,
+    decimal_places=2,
+    null=True,
+    blank=True,
+    verbose_name="Preço com Desconto",
+    help_text="Adicione somente se for aplicar um desconto para este produto."  # ← Aqui
+    )
+
+
     def save(self, *args, **kwargs):
         if not self.slug:
             base_slug = slugify(self.nome)
@@ -98,7 +147,11 @@ class Produto(models.Model):
         return self.avaliacoes.count()
 
 
-
+    @property
+    def desconto_percentual(self):
+        if self.preco_desconto and self.preço:
+            return int(round(100 - (self.preco_desconto / self.preço * 100)))
+        return 0
 
 
 
@@ -239,3 +292,5 @@ class ImagemProduto(models.Model):
 
     def __str__(self):
         return f"Imagem de {self.produto.nome}"
+
+

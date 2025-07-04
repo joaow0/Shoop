@@ -1,7 +1,8 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from .models import Customer
+from django.contrib.auth import authenticate
 
 class FormRegistro(UserCreationForm):
     username = forms.CharField(label='Usuário', widget=forms.TextInput(attrs={
@@ -89,3 +90,29 @@ class FormRegistro(UserCreationForm):
         )
 
         return user
+
+
+class EmailAuthenticationForm(AuthenticationForm):
+    username = forms.EmailField(label='E-mail', widget=forms.EmailInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Digite seu e-mail'
+    }))
+    password = forms.CharField(label='Senha', widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Digite sua senha'
+    }))
+
+    def clean(self):
+        email = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+
+        if email and password:
+            try:
+                user = User.objects.get(email=email)
+                self.user_cache = authenticate(username=user.username, password=password)
+                if self.user_cache is None:
+                    raise forms.ValidationError("E-mail ou senha inválidos.")
+            except User.DoesNotExist:
+                raise forms.ValidationError("E-mail não encontrado.")
+
+        return self.cleaned_data

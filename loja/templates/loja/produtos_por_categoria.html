@@ -1,0 +1,121 @@
+{% extends 'loja/main.html' %}
+{% load loja_filters %} {# Certifique-se de carregar seus filtros customizados #}
+
+{% block content %}
+  {# O cabeçalho pode mudar dependendo da categoria #}
+  {% if categoria_selecionada == 'moda' %}
+    <h2 class="fw-bold mb-4 text-center">🛍️ Encontre o estilo que combina com você</h2>
+  {% else %}
+    <h2 class="fw-bold mb-4 text-center">🛒 Confira nossos produtos em {{ categoria_selecionada|capfirst }}</h2>
+  {% endif %}
+
+  <div class="row">
+    <div class="col-md-3 mb-4">
+        <form method="get" class="filtro-lateral rounded p-3 shadow-sm">
+            <h5 class="fw-bold mb-3">Filtros</h5>
+
+            {# --- FILTROS PARA A CATEGORIA 'ROUPAS' --- #}
+            {% if categoria_selecionada == 'roupas' %}
+                <div class="mb-3">
+                    <label for="tipo_roupa" class="form-label">Tipo de Roupa</label>
+                    <select name="tipo_roupa" id="tipo_roupa" class="form-select">
+                        <option value="">Todos</option>
+                        {% for type_slug, type_name in tipos_roupa_choices %}
+                            <option value="{{ type_slug }}" {% if tipo_roupa_selecionado == type_slug %}selected{% endif %}>
+                                {{ type_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            
+
+            {# --- FILTROS PARA A CATEGORIA 'MODA' --- #}
+            {% elif categoria_selecionada == 'acessorios' %}
+                <div class="mb-3">
+                    <label for="tipo_acessorio" class="form-label">Tipo de Acessório</label>
+                    <select name="tipo_acessorio" id="tipo_acessorio" class="form-select">
+                        <option value="">Todos</option>
+                        {% for type_slug, type_name in tipos_acessorios_choices %}
+                            <option value="{{ type_slug }}" {% if tipo_acessorio_selecionado == type_slug %}selected{% endif %}>
+                                {{ type_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
+
+            {# FILTROS GERAIS (PREÇO E ORDEM ALFABÉTICA) SEMPRE VISÍVEIS EM PÁGINAS DE CATEGORIA #}
+            <div class="mb-3">
+                <label for="preco_min" class="form-label">Preço Mínimo</label>
+                <input type="number" name="preco_min" id="preco_min" class="form-control" value="{{ request.GET.preco_min }}" placeholder="Mín.">
+            </div>
+            <div class="mb-3">
+                <label for="preco_max" class="form-label">Preço Máximo</label>
+                <input type="number" name="preco_max" id="preco_max" class="form-control" value="{{ request.GET.preco_max }}" placeholder="Máx.">
+            </div>
+
+            <div class="mb-4">
+                <label for="ordenar" class="form-label">Ordenar por</label>
+                <select name="ordenar" id="ordenar" class="form-select">
+                    <option value="">Selecione</option>
+                    <option value="menor_preco" {% if ordenacao == 'menor_preco' %}selected{% endif %}>Menor preço</option>
+                    <option value="maior_preco" {% if ordenacao == 'maior_preco' %}selected{% endif %}>Maior preço</option>
+                    <option value="a_z" {% if ordenacao == 'a_z' %}selected{% endif %}>A → Z</option>
+                    <option value="z_a" {% if ordenacao == 'z_a' %}selected{% endif %}>Z → A</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Aplicar Filtros</button>
+        </form>
+    </div> <div class="col-md-9">
+        {% if produtos %}
+            <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+                {% for produto in produtos %}
+                    {% include 'loja/card_produto.html' with produto=produto %}
+                {% endfor %}
+            </div>
+
+            <nav class="mt-5">
+                <ul class="pagination justify-content-center">
+                    {% with current_params=request.GET %}
+                        {% if produtos.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?{{ current_params|remove_page_param }}&page={{ produtos.previous_page_number }}" aria-label="Anterior">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" aria-label="Anterior">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+
+                        {% for num in produtos.paginator.page_range %}
+                            <li class="page-item {% if produtos.number == num %}active{% endif %}">
+                                <a class="page-link" href="?{{ current_params|remove_page_param }}&page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% endfor %}
+
+                        {% if produtos.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?{{ current_params|remove_page_param }}&page={{ produtos.next_page_number }}" aria-label="Próximo">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" aria-label="Próximo">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endwith %}
+                </ul>
+            </nav>
+        {% else %}
+            <p>Nenhum produto encontrado nesta categoria.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -10,11 +10,14 @@ class ProdutoAdmin(admin.ModelAdmin):
     fields = [
         'nome',
         'preço',
+        'preco_desconto',     # ← ADICIONAR ESTA LINHA
         'digital',
         'imagem',
         'descricao',         # 🛒 "Sobre este produto"
         'caracteristicas',   # 🔧 Características Técnicas
         'categoria',
+        'tipo_roupa',
+        'tipo_acessorio',
         'estoque',
     ]
 

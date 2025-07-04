@@ -50,11 +50,17 @@ def carrinhodata(request):
         )
         pedido, _ = Pedido.objects.get_or_create(cliente=cliente, completo=False)
 
-        # Remove itens com produto deletado (produto=None)
+        # ⚠️ Limpa primeiro os produtos deletados
         pedido.pedidoitem_set.filter(produto__isnull=True).delete()
 
-        itens = pedido.pedidoitem_set.all()
-        carrinhoitens = pedido.get_cart_items
+        try:
+            carrinhoitens = pedido.get_cart_items
+            itens = pedido.pedidoitem_set.all()
+        except Exception as e:
+            print(f"[ERRO] carrinho: {e}")
+            carrinhoitens = 0
+            itens = []
+
     else:
         cookiedata = cookiecarrinho(request)
         carrinhoitens = cookiedata['carrinhoitens']

@@ -39,8 +39,9 @@
 
 .zoom-container {
     position: relative;
-    width: 450px;
-    height: 450px;
+    width: 100%;
+    max-width: 450px;
+    aspect-ratio: 1 / 1; /* Mantém a proporção quadrada */
     background: white;
     overflow: hidden;
     border-radius: 10px;
@@ -48,6 +49,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    height: auto; /* Remove altura fixa para responsividade */
 }
 
 .zoom-container img {
@@ -65,4 +67,31 @@
 
 .zoom-preview {
     display: none;
+}
+
+/* Media query para telas pequenas (mobile) */
+@media (max-width: 767.98px) {
+  .galeria-wrapper {
+    flex-direction: column !important; /* Galeria e info empilhados verticalmente */
+  }
+
+  .galeria-principal {
+    width: 100% !important;
+  }
+
+  .zoom-container {
+    max-width: 100% !important;
+    aspect-ratio: auto !important; /* Permite altura flexível */
+    height: auto !important;
+  }
+
+  #imagem-principal {
+    height: auto !important;
+    max-width: 100% !important;
+  }
+
+  /* Margem inferior para não colar na info */
+  .galeria-wrapper {
+    margin-bottom: 1rem;
+  }
 }

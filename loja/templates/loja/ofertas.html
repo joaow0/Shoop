@@ -1,0 +1,15 @@
+{% extends 'loja/main.html' %}
+{% load format_tags %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="fw-bold mb-4 text-center">🔥 Produtos em Oferta</h2>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        {% for produto in produtos %}
+            {% include 'loja/card_produto.html' %}
+        {% empty %}
+            <p class="text-center">Nenhum produto em oferta no momento.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

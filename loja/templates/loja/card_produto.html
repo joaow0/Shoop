@@ -1,12 +1,23 @@
 {% load format_tags %}
 <div class="col fade-in">
-  <div class="card h-100 border-0 shadow-sm d-flex flex-column">
+  <div class="card h-100 border-0 shadow-sm d-flex flex-column position-relative">
+
+    {% if produto.preco_desconto %}
+      <span class="badge bg-danger position-absolute top-0 start-0 m-2 px-2 py-1 shadow">
+        -{{ produto.desconto_percentual }}%
+      </span>
+    {% endif %}
+
     <a href="{% url 'produto' produto.slug %}" class="text-decoration-none text-dark">
       <img class="card-img-top"
            src="{{ produto.imagemURL }}"
            alt="{{ produto.nome }}"
-           style="object-fit: cover; height: 220px;">
-      <div class="card-body d-flex flex-column">
+           style="object-fit: contain; height: 220px;">
+    </a>
+
+    <div class="card-body d-flex flex-column">
+      <a href="{% url 'produto' produto.slug %}" class="text-decoration-none text-dark flex-grow-1 d-flex flex-column">
+
         <h6 class="fw-bold mb-1" style="min-height: 48px;">{{ produto.nome }}</h6>
 
         <div class="mb-2">
@@ -26,18 +37,38 @@
           {{ produto.descricao|default:"" }}
         </p>
 
-        <h5 class="text-success fw-semibold mt-auto">
-           {{ produto.preço|moeda_br }}
-        </h5>
-      </div>
-    </a>
+        {% if produto.preco_desconto %}
+          <div class="mt-auto">
+            <h6 class="text-muted text-decoration-line-through mb-1">
+              {{ produto.preço|moeda_br }}
+            </h6>
+            <h5 class="text-success fw-bold">
+              {{ produto.preco_desconto|moeda_br }}
+            </h5>
+            <div class="text-muted small">
+              Em até 12x de {{ produto.preco_desconto|divisao:12|floatformat:2|moeda_br }} sem juros
+            </div>
+          </div>
+        {% else %}
+          <div class="mt-auto">
+            <h5 class="fw-semibold text-dark mb-1">
+              {{ produto.preço|moeda_br }}
+            </h5>
+            <div class="text-muted small">
+              Em até 12x de {{ produto.preço|divisao:12|floatformat:2|moeda_br }} sem juros
+            </div>
+          </div>
+        {% endif %}
+      </a>
+    </div>
 
-    <div class="card-footer bg-transparent border-0 px-3 pb-3">
+    <div class="card-footer bg-transparent border-0 px-3 pb-3 mt-auto">
       <button data-product="{{ produto.id }}"
               data-action="add"
               class="btn btn-sm btn-outline-primary w-100 update-cart">
-        🛒 Adicionar
+         Adicionar
       </button>
     </div>
+
   </div>
 </div>

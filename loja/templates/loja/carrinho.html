@@ -51,7 +51,7 @@
 
                     <div class="col-md-2 mb-2 mb-md-0">
                         <div class="d-flex flex-column align-items-center">
-                            <p class="mb-1" data-prod-id-qtd="{{ item.produto.id }}">{{ item.quantidade }}</p> <!-- <- Atualiza aqui -->
+                            <p class="mb-1" data-quantidade-produto="{{ item.produto.id }}">{{ item.quantidade }}</p>
                             <div class="d-flex flex-column">
                                 <img data-product="{{ item.produto.id }}" data-action="add"
                                     class="chg-quantity update-cart mb-1"
@@ -66,9 +66,8 @@
                     </div>
 
                     <div class="col-md-2">
-                        <span data-prod-id-total="{{ item.produto.id }}">{{ item.get_total|moeda_br }}</span> <!-- <- Atualiza aqui -->
+                        <span data-total-produto="{{ item.produto.id }}" data-preco="{{ item.produto.preço }}">{{ item.get_total|moeda_br }}</span>
                     </div>
-
                 </div>
                 {% endif %}
             {% endfor %}

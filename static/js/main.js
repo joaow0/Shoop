@@ -33,25 +33,68 @@ if (!cart || Object.keys(cart).length === 0) {
 }
 console.log('Cart:', cart);
 
-
 document.addEventListener('DOMContentLoaded', function () {
   const toggleBtn = document.getElementById('toggle-dark');
 
-  // Força o modo escuro caso localStorage diga isso (garantia)
   const savedTheme = localStorage.getItem('tema');
   if (savedTheme === 'dark') {
-    document.body.classList.add('dark-mode');
+    document.documentElement.classList.add('dark-mode');
+  } else {
+    document.documentElement.classList.remove('dark-mode');
   }
 
-  // Clique no botão para alternar
   if (toggleBtn) {
     toggleBtn.addEventListener('click', () => {
-      const isDark = document.body.classList.toggle('dark-mode');
+      const isDark = document.documentElement.classList.toggle('dark-mode');
       const tema = isDark ? 'dark' : 'light';
       localStorage.setItem('tema', tema);
-
-      // Salvar também em cookie (para uso no backend)
       document.cookie = `tema=${tema};path=/;SameSite=Lax`;
     });
+  } else {
+    console.warn('[DarkMode] Botão não encontrado.');
+  }
+
+  // Comprar Agora - adiciona item e redireciona para checkout
+  document.querySelectorAll('.buy-now').forEach(btn => {
+    btn.addEventListener('click', function (e) {
+      const productId = this.dataset.product;
+      const action = this.dataset.action;
+
+      fetch('/atualizacaoitem/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken,
+        },
+        body: JSON.stringify({ productId, action })
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Item adicionado para compra imediata:', data);
+          window.location.href = '/checkout/';
+        });
+    });
+  });
+});
+
+// Atualiza o número de itens no carrinho ao voltar para a página
+window.addEventListener("pageshow", function (event) {
+  if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+    fetch('/carrinho/quantidade/')
+      .then(response => response.json())
+      .then(data => {
+        const cartCount = document.getElementById('cart-total');
+        if (cartCount) {
+          cartCount.textContent = data.total_itens;
+        }
+      });
+  }
+});
+
+
+// Detecta se a página foi carregada via cache (ex: botão voltar do navegador)
+window.addEventListener('pageshow', function (event) {
+  if (event.persisted || (window.performance && performance.getEntriesByType("navigation")[0].type === "back_forward")) {
+    location.reload(); // Recarrega para garantir que o carrinho esteja atualizado
   }
 });

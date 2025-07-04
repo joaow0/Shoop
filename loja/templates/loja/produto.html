@@ -1,5 +1,6 @@
 {% extends 'loja/main.html' %}
 {% load static %}
+{% load format_tags %}
 {% block styles %}
 <link rel="stylesheet" href="{% static 'css/produto.css' %}">
 {% endblock %}
@@ -19,9 +20,9 @@
     {% endif %}
 
     <!-- Seção Principal -->
-    <div class="row">
+    <div class="row flex-column flex-md-row">
         <!-- Galeria -->
-        <div class="col-md-6">
+        <div class="col-12 col-md-6 mb-4 mb-md-0">
             <div class="galeria-wrapper">
                 <div class="galeria-thumbs">
                     {% if produto.imagem %}
@@ -43,7 +44,7 @@
             </div>
         </div>
         <!-- Informações do Produto -->
-        <div class="col-md-6">
+        <div class="col-12 col-md-6">
             <h1 class="fw-bold mb-1">{{ produto.nome }}</h1>
 
             <!-- ⭐ Estrelas -->
@@ -58,89 +59,152 @@
                 <span class="text-muted ms-2">({{ media }}/5)</span>
             </div>
 
-            <h3 class="text-success mb-3">R${{ produto.preço|floatformat:2 }}</h3>
+            {% if produto.preco_desconto %}
+                <div class="mb-3">
+                    <h5 class="text-muted text-decoration-line-through mb-1">
+                        {{ produto.preço|moeda_br }}
+                    </h5>
+                    <h3 class="text-success fw-bold mb-1">
+                        {{ produto.preco_desconto|moeda_br }}
+                    </h3>
+                    <div class="text-muted small">
+                        Em até 12x de {{ produto.preco_desconto|divisao:12|floatformat:2|moeda_br }} sem juros
+                    </div>
+                </div>
+            {% else %}
+                <div class="mb-3">
+                    <h3 class="fw-bold text-body mb-1">
+                        {{ produto.preço|moeda_br }}
+                    </h3>
+                    <div class="text-muted small">
+                        Em até 12x de {{ produto.preço|divisao:12|floatformat:2|moeda_br }} sem juros
+                    </div>
+                </div>
+            {% endif %}
+
 
             <div class="d-flex gap-3 mb-4">
                 <button data-product="{{ produto.id }}" data-action="add" class="btn btn-primary update-cart">
-                    🛒 Adicionar ao Carrinho
+                     Adicionar ao Carrinho
+                </button>
+                
+                <button data-product="{{ produto.id }}" data-action="add" class="btn btn-success buy-now">
+                    💳 Comprar Agora
                 </button>
 
-                <a href="{% url 'checkout' %}" class="btn btn-success">
-                    💳 Comprar Agora
-                </a>
             </div>
             <!-- Características Técnicas resumidas ao lado dos botões -->
             <div class="mt-4">
-                <h5 class="fw-bold mb-2">🛒 Sobre este produto</h5>
+                <h5 class="fw-bold mb-2">Sobre este produto</h5>
                 {% if produto.descricao %}
                     <p class="text-muted">{{ produto.descricao|linebreaks }}</p>
                 {% else %}
                     <p class="text-muted">Sem descrição disponível.</p>
                 {% endif %}
             </div>
-            <p class="text-muted">{{ produto.descricao|linebreaks }}</p>        </div>
+        </div>
     </div>
 
     <!-- Divider -->
     <hr class="my-5">
 
-        <!-- Descrição e Características -->
+    <!-- Descrição e Características -->
     <div class="row">
         <div class="col-12">
-            <h4 class="fw-bold mt-4 mb-3">🔧 Características Técnicas</h4>
+            <h4 class="fw-bold mt-4 mb-3">Detalhes Do produto</h4>
             <ul class="list-group">
                 {% if produto.caracteristicas %}
                     {% for caracteristica in produto.caracteristicas.splitlines %}
-                        <li class="list-group-item">✅ {{ caracteristica }}</li>
+                        <li class="list-group-item">{{ caracteristica }}</li>
                     {% endfor %}
                 {% else %}
                     <li class="list-group-item">Sem características informadas.</li>
                 {% endif %}
             </ul>
-
         </div>
     </div>
 
     <!-- Divider -->
     <hr class="my-5">
 
-    <!-- Produtos Relacionados -->
+    <!-- Produtos Recomendados -->
     <div class="row">
         <div class="col-12">
-            <h3 class="fw-bold mb-4">🛍 Produtos Relacionados</h3>
+            <h3 class="fw-bold mb-4">🔥 Produtos Recomendados</h3>
         </div>
 
         {% if recomendados %}
-            {% for item in recomendados %}
-                <div class="col-md-3 col-sm-6 mb-4">
-                    <a href="{% url 'produto' item.slug %}" class="text-decoration-none text-dark">
-                        <div class="card h-100 shadow-sm">
-                            <img src="{{ item.imagemURL }}" class="card-img-top" alt="{{ item.nome }}">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">{{ item.nome }}</h5>
-                                <p class="text-success fw-bold mb-2">
-                                    R$ {{ item.preço|floatformat:2 }}
-                                </p>
-                                <div class="mt-auto">
-                                    <button data-product="{{ item.id }}" data-action="add" class="btn btn-sm btn-primary update-cart w-100">
-                                        🍎 Adicionar
-                                    </button>
-                                </div>
-                            </div>
+            <div class="position-relative">
+                <button class="scroll-btn scroll-left" onclick="scrollContainer('left')">❮</button>
+                <button class="scroll-btn scroll-right" onclick="scrollContainer('right')">❯</button>
+                <div id="scroll-container" class="scroll-horizontal-container d-flex flex-nowrap gap-3 px-2">
+                    {% for produto in recomendados %}
+                        <div class="flex-shrink-0" style="width: 250px;">
+                            {% include 'loja/card_produto.html' with produto=produto %}
                         </div>
-                    </a>
+                    {% endfor %}
                 </div>
-            {% endfor %}
+            </div>
         {% else %}
             <div class="col-12">
-                <p class="text-muted">Nenhum produto relacionado no momento.</p>
+                <p class="text-muted">Nenhum produto recomendado no momento.</p>
             </div>
         {% endif %}
     </div>
 
-
     <!-- Avaliações -->
-    <div class="row">
+    <div class="row mt-5">
+        <div class="col-12">
+            <h4 class="fw-bold mb-3">🔁 Deixe sua Avaliação</h4>
+
+            {% if user.is_authenticated %}
+                {% if minha_avaliacao %}
+                    <div class="alert alert-info">
+                        <strong>Você já avaliou este produto.</strong>
+                        <div class="mb-1">
+                            {% for i in "12345"|slice:":5" %}
+                                {% if minha_avaliacao.nota >= forloop.counter %}
+                                    <span style="color: gold;">★</span>
+                                {% else %}
+                                    <span style="color: #ccc;">★</span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <span class="text-muted">Comentário:</span>
+                        <em>{{ minha_avaliacao.comentario|default:"(sem comentário)" }}</em><br>
+                        <span class="text-muted">Data:</span> {{ minha_avaliacao.data_avaliacao|date:"d/m/Y H:i" }}
+                    </div>
+                {% else %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="nota" class="form-label">Nota</label>
+                            <select id="nota" name="nota" class="form-select" required>
+                                <option value="">Selecione</option>
+                                <option value="5">5 - Excelente</option>
+                                <option value="4">4 - Muito bom</option>
+                                <option value="3">3 - Bom</option>
+                                <option value="2">2 - Regular</option>
+                                <option value="1">1 - Ruim</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="comentario" class="form-label">Comentário (opcional)</label>
+                            <textarea id="comentario" name="comentario" rows="3" class="form-control"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enviar Avaliação</button>
+                    </form>
+                {% endif %}
+            {% else %}
+                <div class="alert alert-warning">
+                    <strong>Atenção:</strong> Faça <a href="{% url 'login' %}?next={{ request.path }}">login</a> para deixar sua avaliação.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Lista de Avaliações -->
+    <div class="row mt-5">
         <div class="col-12">
             <h3 class="fw-bold mb-3">⭐ Avaliações ({{ media }}/5)</h3>
 
@@ -149,87 +213,25 @@
                     <div class="border rounded p-3 mb-3">
                         <div class="d-flex justify-content-between">
                             <strong>{{ avaliacao.cliente.nome }}</strong>
-                            <span>Nota: {{ avaliacao.nota }}/5</span>
+                            <span class="text-muted small">{{ avaliacao.data_avaliacao|date:"d/m/Y H:i" }}</span>
                         </div>
-                        <p class="mt-2 mb-0">{{ avaliacao.comentario }}</p>
+                        <div class="mb-1">
+                            {% for i in "12345"|slice:":5" %}
+                                {% if avaliacao.nota >= forloop.counter %}
+                                    <span style="color: gold;">★</span>
+                                {% else %}
+                                    <span style="color: #ccc;">★</span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <p class="mb-0">{{ avaliacao.comentario|default:"(Sem comentário)" }}</p>
                     </div>
                 {% endfor %}
             {% else %}
-                <p>Este produto ainda não possui avaliações.</p>
+                <p class="text-muted">Este produto ainda não possui avaliações.</p>
             {% endif %}
         </div>
     </div>
-
-    <!-- Formulário de Avaliação -->
-    <div class="row mt-5">
-        <div class="col-12">
-            <h4 class="fw-bold mb-3">🔁 Deixe sua Avaliação</h4>
-
-            {% if user.is_authenticated %}
-                <form method="POST">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="nota" class="form-label">Nota</label>
-                        <select id="nota" name="nota" class="form-select" required>
-                            <option value="">Selecione</option>
-                            <option value="5">5 - Excelente</option>
-                            <option value="4">4 - Muito bom</option>
-                            <option value="3">3 - Bom</option>
-                            <option value="2">2 - Regular</option>
-                            <option value="1">1 - Ruim</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="comentario" class="form-label">Comentário (opcional)</label>
-                        <textarea id="comentario" name="comentario" rows="3" class="form-control"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Enviar Avaliação</button>
-                </form>
-            {% else %}
-                <div class="alert alert-warning">
-                    <strong>Atenção:</strong> Faça <a href="#">login</a> para deixar sua avaliação.
-                </div>
-            {% endif %}
-        </div>
-    </div>
-
-</div>
-
-<!-- Divider -->
-<hr class="my-5">
-
-<!-- Produtos Recomendados -->
-<div class="row">
-    <div class="col-12">
-        <h3 class="fw-bold mb-4">🔥 Produtos Recomendados</h3>
-    </div>
-
-    {% if recomendados %}
-        {% for item in recomendados %}
-            <div class="col-md-3 col-sm-6 mb-4">
-                <a href="{% url 'produto' item.slug %}" class="text-decoration-none text-dark" class="text-decoration-none text-dark">
-                    <div class="card h-100 shadow-sm">
-                        <img src="{{ item.imagemURL }}" class="card-img-top" alt="{{ item.nome }}">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">{{ item.nome }}</h5>
-                            <p class="text-success fw-bold mb-2">
-                                R$ {{ item.preço|floatformat:2 }}
-                            </p>
-                            <div class="mt-auto">
-                                <button data-product="{{ item.id }}" data-action="add" class="btn btn-sm btn-primary update-cart w-100">
-                                    🍎 Adicionar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        {% endfor %}
-    {% else %}
-        <div class="col-12">
-            <p class="text-muted">Nenhum produto recomendado no momento.</p>
-        </div>
-    {% endif %}
 </div>
 {% endblock %}
 

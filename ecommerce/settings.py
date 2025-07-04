@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'loja',
 ]
 
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -62,6 +64,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'loja.context_processors.categorias_disponiveis',
+                'loja.context_processors.carrinho_contexto',
             ],
         },
     },
@@ -140,3 +144,6 @@ MEDIA_URL = '/media/'
 #esse aqui vai servir para as imagens dinamicas
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_REDIRECT_URL = 'loja'  # ou 'perfil' se preferir ir para a conta do usuário
+
+
+

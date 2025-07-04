@@ -1,0 +1,92 @@
+[
+  {
+    "nome": "Camiseta Oversized Branca",
+    "descricao": "Camiseta branca de algodão premium com caimento oversized e gola reforçada.",
+    "preço": 89.90,
+    "preco_desconto": 69.90,
+    "categoria": "Camisetas",
+    "imagem": "https://images.unsplash.com/photo-1586864381031-cf1e7a33c3d2",
+    "slug": "camiseta-oversized-branca"
+  },
+  {
+    "nome": "Calça Cargo Verde Militar",
+    "descricao": "Calça com bolsos laterais, estilo utilitário, ideal para looks urbanos.",
+    "preço": 159.90,
+    "preco_desconto": null,
+    "categoria": "Calças",
+    "imagem": "https://images.unsplash.com/photo-1602810318696-d141a858980b",
+    "slug": "calca-cargo-verde-militar"
+  },
+  {
+    "nome": "Jaqueta Jeans Unissex",
+    "descricao": "Jaqueta jeans com lavagem clara, modelagem unissex e detalhes em botão metálico.",
+    "preço": 219.90,
+    "preco_desconto": 179.90,
+    "categoria": "Jaquetas",
+    "imagem": "https://images.unsplash.com/photo-1581619181993-3f22af3ce4b3",
+    "slug": "jaqueta-jeans-unissex"
+  },
+  {
+    "nome": "Vestido Midi Floral",
+    "descricao": "Vestido com estampa floral delicada, alças finas e tecido leve. Ideal para verão.",
+    "preço": 189.90,
+    "preco_desconto": 149.90,
+    "categoria": "Vestidos",
+    "imagem": "https://images.unsplash.com/photo-1555529771-35a38c0f0c5b",
+    "slug": "vestido-midi-floral"
+  },
+  {
+    "nome": "Tênis Branco Casual",
+    "descricao": "Tênis branco unissex, com sola de borracha e acabamento em couro sintético.",
+    "preço": 249.90,
+    "preco_desconto": 199.90,
+    "categoria": "Calçados",
+    "imagem": "https://images.unsplash.com/photo-1618354691213-01214c63ce01",
+    "slug": "tenis-branco-casual"
+  },
+  {
+    "nome": "Óculos de Sol Redondo",
+    "descricao": "Óculos com armação redonda retrô e proteção UV400. Estilo e proteção para o dia a dia.",
+    "preço": 129.90,
+    "preco_desconto": null,
+    "categoria": "Acessórios",
+    "imagem": "https://images.unsplash.com/photo-1520813792240-56fc4a3765a7",
+    "slug": "oculos-sol-redondo"
+  },
+  {
+    "nome": "Bolsa Tote Minimalista",
+    "descricao": "Bolsa feminina em couro ecológico com alça dupla e compartimento interno espaçoso.",
+    "preço": 179.90,
+    "preco_desconto": 139.90,
+    "categoria": "Acessórios",
+    "imagem": "https://images.unsplash.com/photo-1530845641156-3791f1cba9a3",
+    "slug": "bolsa-tote-minimalista"
+  },
+  {
+    "nome": "Short Jeans Destroyed",
+    "descricao": "Short jeans com barra desfiada, cintura alta e lavagem clara.",
+    "preço": 109.90,
+    "preco_desconto": null,
+    "categoria": "Shorts",
+    "imagem": "https://images.unsplash.com/photo-1602810318674-67d36f2b35a6",
+    "slug": "short-jeans-destroyed"
+  },
+  {
+    "nome": "Camisa Social Slim Fit",
+    "descricao": "Camisa social masculina com modelagem ajustada, ideal para ambientes formais.",
+    "preço": 139.90,
+    "preco_desconto": 119.90,
+    "categoria": "Camisas",
+    "imagem": "https://images.unsplash.com/photo-1618354691212-cf9e7a43e24c",
+    "slug": "camisa-social-slim-fit"
+  },
+  {
+    "nome": "Mochila Casual Unissex",
+    "descricao": "Mochila leve com compartimento acolchoado para notebook, ideal para o dia a dia.",
+    "preço": 159.90,
+    "preco_desconto": null,
+    "categoria": "Acessórios",
+    "imagem": "https://images.unsplash.com/photo-1598032899656-206bbc76a20a",
+    "slug": "mochila-casual-unissex"
+  }
+]

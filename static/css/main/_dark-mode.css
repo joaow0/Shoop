@@ -1,0 +1,73 @@
+body.dark-mode .custom-navbar,
+body.dark-mode .bg-primary,
+body.dark-mode .dropdown-menu {
+    background-color: var(--navbar-bg) !important;
+}
+
+body.dark-mode a,
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6 {
+    color: var(--text-color);
+}
+
+body.dark-mode .btn-outline-light {
+    border-color: var(--text-color);
+    color: var(--text-color);
+}
+
+body.dark-mode .btn-outline-light:hover {
+    background-color: var(--text-color);
+    color: var(--bg-color);
+}
+
+
+
+/* Fundo e texto de cards e elementos principais */
+body.dark-mode .card,
+body.dark-mode .box-element,
+body.dark-mode .card-body,
+body.dark-mode .card-footer,
+body.dark-mode .modal-content {
+    background-color: #1e1e1e !important;
+    color: var(--text-color) !important;
+    border-color: #333 !important;
+}
+
+/* Títulos e links escuros */
+body.dark-mode a,
+body.dark-mode .text-dark {
+    color: var(--text-color) !important;
+}
+
+/* Corrige textos secundários */
+body.dark-mode .text-muted {
+    color: #b0b0b0 !important;
+}
+
+/* Corrige campos de formulário */
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+    background-color: #2a2a2a !important;
+    color: var(--text-color) !important;
+    border-color: #444 !important;
+}
+
+/* Corrige borda dos botões outline */
+body.dark-mode .btn-outline-primary {
+    border-color: #4dabf7 !important;
+    color: #4dabf7 !important;
+}
+
+body.dark-mode .btn-outline-primary:hover {
+    background-color: #4dabf7 !important;
+    color: #121212 !important;
+}
+
+html, body.dark-mode {
+    background-color: #121212 !important;
+}

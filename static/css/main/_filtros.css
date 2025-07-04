@@ -1,0 +1,25 @@
+.filtro-lateral {
+    background-color: #ffffff;
+    color: #212529;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border: 1px solid #ddd;
+}
+
+.filtro-lateral .form-label,
+.filtro-lateral select,
+.filtro-lateral .btn {
+    background-color: #ffffff;
+    color: #212529;
+    border-color: #ccc;
+}
+
+.filtro-lateral .btn {
+    background-color: #2563eb;
+    color: #fff;
+    border: none;
+}
+
+.filtro-lateral .btn:hover {
+    background-color: #1d4ed8;
+}
+

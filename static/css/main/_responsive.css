@@ -1,0 +1,40 @@
+@media (max-width: 576px) {
+    .row.g-4 {
+        --bs-gutter-x: 1rem;
+        --bs-gutter-y: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .scroll-btn {
+        display: none;
+    }
+}
+
+@media (min-width: 992px) {
+    .navbar-collapse .form-control {
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .navbar-action-group {
+        width: auto;
+        justify-content: flex-end;
+        margin-left: auto;
+        margin-top: 0;
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 991.98px) {
+    #navbarNav {
+        padding-bottom: 1rem;
+    }
+    #navbarNav > .d-flex {
+        margin-bottom: 0.75rem;
+    }
+    #navbarNav > .d-flex:last-child {
+        margin-bottom: 0;
+    }
+}
