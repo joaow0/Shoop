@@ -1,64 +1,133 @@
+# 🛒 Full E-commerce Store | Professional Online Shop with Django, JavaScript & CSS
 
-# 🛒 virtual store - v4
+**Version: v5 (final version)**
 
-## 🇺🇸 English Version
+# 🇺🇸 English
 
-### 📌 Description
-This project is a fully-featured online store built with **Django**. **Version 4** introduces major improvements in usability, visual design, product navigation, and admin features. It is being developed with the support of **Artificial Intelligence (AI)** to ensure optimal structure, performance, and design.
-
-### ✅ Features implemented today
-
-#### 1. 🌙 Dark Mode
-- Implemented **dark mode** across the entire site
-- Toggle button in the navbar lets users switch between light and dark themes
-- User preference is saved locally
-
-#### 2. 📊 Custom Administrative Dashboard (outside Django Admin)
-- Displays **Total Sales**
-- Shows **Number of Orders**
-- Lists the **Top-Selling Products**
-- Section for **Stock Management** based on current product data
-
-#### 3. 🔗 SEO-Friendly URLs with Slug Support
-- Product URLs now use **name-based slugs** instead of numeric IDs  
-  - Example:  
-    **From:** `/product/3/`  
-    **To:** `/product/camiseta-amarela/`
-- Slugs are automatically generated with `slugify` in the product model
-- Greatly improves **SEO** and user experience
+I developed a fully functional e-commerce website focused on **performance**, **clean architecture**, and **user experience**.  
+The system was built using **Python (Django)** on the backend, and **JavaScript + CSS (with Bootstrap)** on the frontend.  
+All core purchase flows are implemented dynamically and ready to scale.
 
 ---
 
+## 🚀 Technologies Used
 
-## 🇧🇷 Versão em Português
+- **Python + Django**
+- **JavaScript** – dynamic interaction and backend integration
+- **Custom CSS + Bootstrap** – modern and responsive layout
+- **HTML5**
+- **localStorage + Cookies** – handles cart for guest users
 
-### 📌 Descrição
-Este projeto é uma loja virtual completa desenvolvida com **Django**. A **versão 4** traz melhorias importantes em usabilidade, visualização de produtos, aparência e controle administrativo. O projeto está sendo desenvolvido com o apoio de **Inteligência Artificial (IA)** para otimizar o design, estrutura e funcionalidades.
-
-### ✅ Funcionalidades implementadas hoje
-
-#### 1. 🌙 Modo Escuro (Dark Mode)
-- Implementado **modo escuro** para toda a loja
-- Botão na barra de navegação permite alternar entre modo claro e escuro
-- Preferência do usuário é armazenada localmente
-
-#### 2. 📊 Dashboard Administrativo Personalizado (fora do Django Admin)
-- Visualização do **Total de Vendas**
-- Contagem da **Quantidade de Pedidos**
-- Lista dos **Produtos mais Vendidos**
-- Seção para **Gerenciamento de Estoque** com base nos dados dos produtos
-
-#### 3. 🔗 URLs Amigáveis (Friendly URLs) e SEO
-- URLs dos produtos agora usam **slugs baseados no nome** em vez de IDs
-  - Exemplo:  
-    **De:** `/produto/3/`  
-    **Para:** `/produto/camiseta-amarela/`
-- Slugs são gerados automaticamente com `slugify` no modelo do produto
-- Melhoria significativa para **SEO** e experiência do usuário
+> 💡 I used **Artificial Intelligence** (AI) as a development ally to accelerate repetitive tasks, validate solutions and optimize delivery time — without compromising the project’s quality or structure.
 
 ---
 
+## 🛍️ Main E-commerce Features
 
+### ✅ Product Catalog
 
-🧠 _Desenvolvido com o apoio da IA (ChatGPT), para uma implementação otimizada e profissional._  
-🧠 _Developed with the help of AI (ChatGPT), for a professional and optimized implementation._
+- Products organized into categories  
+- Pagination included  
+- Recommended products based on browsing behavior  
+- Product page with detailed description, specs and images  
+
+### ✅ Dynamic Shopping Cart
+
+- Real-time updates (AJAX, no page reloads)  
+- Works for both logged-in users and anonymous guests (via cookies)  
+- Full order summary at checkout  
+
+### ✅ Professional Checkout
+
+- Payment options: Pix (with QR Code), Credit Card (up to 12x installments), and Boleto  
+- Responsive layout with data form and side summary  
+
+### ✅ User System
+
+- Registration, login, logout, and user dashboard  
+- Order history and user data management  
+- Product review only available after order delivery  
+
+### ✅ Additional Highlights
+
+- Fully responsive (desktop and mobile)  
+- Dark Mode (toggle light/dark theme)  
+- SEO-friendly URLs (slugs)  
+- Modular codebase, clean and scalable  
+- Built following industry best practices (like real-world freelance or company projects)  
+
+---
+
+## ⚠️ Note
+
+The products listed are **demo items only**, created to showcase the system’s full capabilities — including cart, checkout, comments, reviews, and other features.
+
+---
+
+---
+
+# 🇧🇷 Português
+
+# 🛍️ Loja Virtual Completa | E-commerce Profissional com Django, JavaScript e CSS
+
+**Versão: v5 (versão final)**
+
+Desenvolvi uma loja online totalmente funcional com foco em **performance**, **organização de código** e **experiência do usuário**.  
+O sistema foi criado com **Python (Django)** no backend e **JavaScript + CSS (com Bootstrap)** no frontend.  
+Todo o fluxo de compra está implementado de forma dinâmica e escalável.
+
+---
+
+## 🚀 Tecnologias Utilizadas
+
+- **Python + Django**  
+- **JavaScript** – dinamismo e integração com o backend  
+- **CSS customizado + Bootstrap** – layout moderno e responsivo  
+- **HTML5**  
+- **localStorage + Cookies** – carrinho para usuários visitantes  
+
+> 💡 Utilizei **Inteligência Artificial** como aliada durante o desenvolvimento para acelerar etapas repetitivas, validar soluções e otimizar o tempo de entrega — sem comprometer a qualidade nem a estrutura do projeto.
+
+---
+
+## 🛍️ Funcionalidades Principais
+
+### ✅ Catálogo de Produtos
+
+- Produtos organizados por categorias  
+- Paginação integrada  
+- Produtos recomendados com base na navegação  
+- Página de produto com descrição, características e imagens  
+
+### ✅ Carrinho de Compras Dinâmico
+
+- Atualização em tempo real (AJAX, sem recarregar página)  
+- Funciona tanto para usuários logados quanto visitantes (via cookies)  
+- Resumo completo do pedido no checkout  
+
+### ✅ Checkout Profissional
+
+- Formas de pagamento: Pix (com QR Code gerado), Cartão de Crédito (parcelas simuladas em até 12x), e Boleto bancário  
+- Interface responsiva com formulário e resumo lateral  
+
+### ✅ Sistema de Usuários
+
+- Cadastro, login, logout e área do cliente  
+- Histórico de pedidos e dados cadastrais  
+- Avaliação de produtos liberada apenas após o pedido ser entregue  
+
+### ✅ Outros Destaques
+
+- Layout 100% responsivo (desktop e mobile)  
+- Modo escuro (com botão de alternância)  
+- URLs amigáveis (slug) com SEO básico  
+- Código modular, limpo e pronto para escalar  
+- Boas práticas aplicadas (como em freelas e projetos reais de empresas)  
+
+---
+
+## ⚠️ Observação
+
+Os produtos cadastrados são **itens fictícios**, criados apenas para demonstrar as funcionalidades da loja — como carrinho, checkout, comentários, avaliações e demais recursos.
+
+---
